@@ -2,6 +2,7 @@ import { Obj } from './obj';
 
 describe('test obj', () => {
   it('should be defined', () => {
-    expect(new Obj()).toBeDefined();
+    const obj = new Obj();
+    expect(obj).toBeDefined();
   });
 });
