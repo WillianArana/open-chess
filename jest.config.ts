@@ -1,7 +1,8 @@
 export default {
   clearMocks: true,
+  collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
+  coverageDirectory: 'coverage',
   coverageProvider: 'v8',
-  rootDir: 'src',
   testRegex: '.*\\..*spec\\.ts$',
   transform: {
     '^.+\\.ts?$': ['@swc/jest'],
