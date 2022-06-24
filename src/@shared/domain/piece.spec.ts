@@ -1,15 +1,18 @@
-import { Board } from './board';
+import { Board } from '../../board/domain/board';
 import { Piece } from './piece';
+
+class PieceMock extends Piece {}
 
 describe('Piece', () => {
   it('should be create piece', () => {
     const board = new Board(2, 3);
-    expect(new Piece(board)).toBeDefined();
+    const piece = new PieceMock(board);
+    expect(piece).toBeDefined();
   });
 
   it('should get board', () => {
     const board = new Board(2, 3);
-    const piece = new Piece(board);
+    const piece = new PieceMock(board);
     expect(piece.board).toBeInstanceOf(Board);
   });
 });

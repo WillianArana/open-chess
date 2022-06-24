@@ -7,6 +7,14 @@ export class Position {
     this._column = column;
   }
 
+  get row(): number {
+    return this._row;
+  }
+
+  get column(): number {
+    return this._column;
+  }
+
   //@Override
   public toString(): string {
     return `${this._row}, ${this._column}`;
