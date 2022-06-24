@@ -26,10 +26,13 @@
       "./src",
       "./test"
     ],
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
       "@shared/*": [
-        "src/@shared/*"
+        "src/@shared/*",
+      ],
+      "@src/*": [
+        "src/*"
       ]
     }
   },

@@ -7,7 +7,9 @@ export default {
   transform: {
     '^.+\\.ts?$': ['@swc/jest'],
   },
+  coveragePathIgnorePatterns: ['<rootDir>/.*.interface.ts$'],
   moduleNameMapper: {
     '@shared/(.*)': '<rootDir>/src/@shared/$1',
+    '@src/(.*)': '<rootDir>/src/$1',
   },
 };
