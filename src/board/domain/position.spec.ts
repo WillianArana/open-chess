@@ -8,7 +8,7 @@ describe('Position', () => {
   });
 
   describe('toString', () => {
-    it('should be get position as string', () => {
+    it('should get position as string', () => {
       const position = new Position(10, 20);
       expect(position.toString()).toBe('10, 20');
     });
