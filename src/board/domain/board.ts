@@ -5,9 +5,9 @@ import { Position } from '@shared/domain/position';
 import { BoardInterface } from '../../@shared/domain/interfaces/board.interface';
 
 export class Board implements BoardInterface {
-  private _rows: number;
-  private _columns: number;
-  private _pieces: Piece[][];
+  private readonly _rows: number;
+  private readonly _columns: number;
+  private readonly _pieces: Piece[][];
 
   constructor(rows: number, columns: number) {
     this._rows = rows;
