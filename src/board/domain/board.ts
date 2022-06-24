@@ -5,22 +5,15 @@ import { Position } from '@shared/domain/position';
 import { BoardInterface } from '../../@shared/domain/interfaces/board.interface';
 
 export class Board implements BoardInterface {
-  private readonly _rows: number;
-  private readonly _columns: number;
+  public readonly rows: number;
+  public readonly columns: number;
+
   private readonly _pieces: Piece[][];
 
   constructor(rows: number, columns: number) {
-    this._rows = rows;
-    this._columns = columns;
+    this.rows = rows;
+    this.columns = columns;
     this._pieces = createMatrix<Piece>(rows)(columns);
-  }
-
-  get rows(): number {
-    return this._rows;
-  }
-
-  get columns(): number {
-    return this._columns;
   }
 
   public piece(position: Position | { row: number; column: number }): Piece | undefined {
