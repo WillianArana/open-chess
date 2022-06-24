@@ -8,6 +8,7 @@
     "prepare": "husky install",
     "test:staged": "npm test -- --findRelatedTests",
     "test:cov": "npm test -- --coverage",
+    "test:dev": "npm run test -- --coverage --watch",
     "lint": "eslint ./src --ext .ts",
     "lint:fix": "eslint ./src --ext .ts --fix",
     "style:check": "prettier --check 'src/**/*.ts'",
