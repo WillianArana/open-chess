@@ -14,11 +14,16 @@ export class ChessMatch {
   public pieces(): ChessPiece[][] {
     const { rows, columns } = this._board;
     const matrix = createMatrix<ChessPiece>(rows)(columns);
+    this.fillPieces(matrix);
+    return matrix;
+  }
+
+  private fillPieces(pieces: ChessPiece[][]): void {
+    const { rows, columns } = this._board;
     for (let i = 0; i < rows; i++) {
       for (let j = 0; j < columns; j++) {
-        matrix[i][j] = this._board.piece({ row: i, column: j }) as ChessPiece;
+        pieces[i][j] = this._board.piece({ row: i, column: j }) as ChessPiece;
       }
     }
-    return matrix;
   }
 }
