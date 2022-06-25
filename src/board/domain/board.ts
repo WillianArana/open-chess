@@ -1,8 +1,8 @@
 import createMatrix from '@shared/domain/helpers/create-matrix';
 import { Piece } from '@shared/domain/piece';
-import { Position } from '@shared/domain/position';
 
 import { BoardInterface } from '../../@shared/domain/interfaces/board.interface';
+import { Position } from './position';
 
 export class Board implements BoardInterface {
   public readonly rows: number;
