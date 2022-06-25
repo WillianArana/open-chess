@@ -1,6 +1,5 @@
-import { Position } from '@shared/domain/position';
-
 import { Board } from './board';
+import { Position } from './position';
 
 describe('Board', () => {
   it('should be create board', () => {

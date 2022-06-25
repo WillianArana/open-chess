@@ -1,5 +1,5 @@
+import { Position } from '../../board/domain/position';
 import { BoardInterface } from './interfaces/board.interface';
-import { Position } from './position';
 
 export abstract class Piece {
   protected position!: Position;

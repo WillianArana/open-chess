@@ -41,7 +41,8 @@
   ],
   "compileOnSave": true,
   "include": [
-    "./src/**/*.ts",
+    "src/**/*.ts",
+    ".console/**/*.ts",
   ],
   "exclude": [
     "node_modules",
