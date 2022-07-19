@@ -1,5 +1,6 @@
 import { info } from 'console';
 import { ChessPiece } from '../src/chess/domain/chess-piece';
+
 export class UI {
   public static printBoard(pieces: ChessPiece[][]): void {
     const size = pieces.length;
