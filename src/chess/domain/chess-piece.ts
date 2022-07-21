@@ -9,4 +9,8 @@ export class ChessPiece extends Piece {
     super(board);
     this.color = color;
   }
+
+  public get isWhite(): boolean {
+    return this.color === Color.White;
+  }
 }

@@ -21,5 +21,6 @@ describe('ChessPiece', () => {
     const board = new Board(2, 3);
     const piece = new ChessPiece(board, Color.White);
     expect(piece.color).toBe(Color.White);
+    expect(piece.isWhite).toBeTruthy();
   });
 });
