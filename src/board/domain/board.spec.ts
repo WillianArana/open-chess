@@ -1,9 +1,17 @@
+import { Piece } from '@shared/domain/piece';
+
 import { Board } from './board';
 import { Position } from './position';
 
 describe('Board', () => {
   it('should be create board', () => {
-    expect(new Board(0, 0)).toBeDefined();
+    expect(new Board(1, 1)).toBeDefined();
+  });
+
+  it('should throw error Board when create board', () => {
+    expect(() => new Board(1, 0)).toThrowError(
+      'Error creating board: there must be at least 1 row and 1 column'
+    );
   });
 
   it('should get rows', () => {
@@ -22,6 +30,32 @@ describe('Board', () => {
       const position = new Position(4, 4);
       const piece = board.piece(position);
       expect(piece).toBeNull();
+    });
+
+    it('should throw error position when get a piece', () => {
+      const board = new Board(2, 2);
+      const position = new Position(4, 4);
+      expect(() => board.piece(position)).toThrowError('Position not on the board');
+    });
+  });
+
+  describe('placePiece', () => {
+    it('should place a piece', () => {
+      const board = new Board(8, 8);
+      const position = new Position(3, 2);
+      const piece = { position, board } as Piece;
+      board.placePiece(piece, position);
+      expect(board.thereIsAPiece(position)).toBeTruthy();
+    });
+
+    it('should throw error when place a piece', () => {
+      const board = new Board(8, 8);
+      const position = new Position(5, 5);
+      const piece = { position, board } as Piece;
+      board.placePiece(piece, position);
+      expect(() => board.placePiece(piece, position)).toThrowError(
+        `There is already a piece on position ${position}`
+      );
     });
   });
 });
