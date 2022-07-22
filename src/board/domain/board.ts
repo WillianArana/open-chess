@@ -34,12 +34,11 @@ export class Board implements BoardInterface {
     return row >= 0 && row < this.rows && column >= 0 && column < this.columns;
   }
 
-  public placePiece(piece: Piece, position: Position): Board {
+  public placePiece(piece: Piece, position: Position): void {
     this.placePieceValidate(position);
     const { row, column } = position;
     this._pieces[row][column] = piece;
     piece.position = position;
-    return this;
   }
 
   private placePieceValidate(position: PositionType): void {
