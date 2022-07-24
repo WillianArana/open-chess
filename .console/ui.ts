@@ -1,8 +1,6 @@
 import { info } from 'console';
 import { ChessPiece } from '../src/chess/domain/chess-piece';
 
-type UIColor = keyof typeof UI;
-
 export class UI {
   public static readonly ANSI_RESET = '\u001B[0m';
   public static readonly ANSI_BLACK = '\u001B[30m';
@@ -23,19 +21,13 @@ export class UI {
   public static readonly ANSI_CYAN_BACKGROUND = '\u001B[46m';
   public static readonly ANSI_WHITE_BACKGROUND = '\u001B[47m';
 
-  private static readonly _pricesColorsDefault = {
-    white: UI.ANSI_BLACK as UIColor,
-    black: UI.ANSI_YELLOW as UIColor,
-  };
-
-  public static printBoard(pieces: ChessPiece[][], piecesColors = UI._pricesColorsDefault): void {
-    const { white, black } = piecesColors;
+  public static printBoard(pieces: ChessPiece[][]): void {
     for (let i = 0; i < pieces.length; i++) {
       let row = `${8 - i} `;
       for (let j = 0; j < pieces.length; j++) {
         const piece = pieces[i][j] as ChessPiece | null;
         if (piece) {
-          row += piece.isWhite ? `${UI[white]}${piece}` : `${UI[black]}${piece}`;
+          row += piece.isWhite ? `${UI.ANSI_WHITE}${piece}` : `${UI.ANSI_YELLOW}${piece}`;
           row += UI.ANSI_RESET;
         } else {
           row += '-';
