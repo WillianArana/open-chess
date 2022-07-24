@@ -27,7 +27,7 @@ export class ChessPosition {
   }
 
   private isValidRow(row: Row): boolean {
-    return row > 0 && row < 9;
+    return row > 0 && row < ROWS_AMOUNT + 1;
   }
 
   public toPosition(): Position {
