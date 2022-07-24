@@ -7,12 +7,15 @@ import { ChessPosition, Column, Row } from './chess-position';
 import { Color } from './color';
 import { King } from './pieces/king';
 import { Rook } from './pieces/rook';
+import ROWS_AMOUNT from './rows-amount';
+
+const COLUMN_AMOUNT = ROWS_AMOUNT;
 
 export class ChessMatch {
   private readonly _board: Board;
 
   constructor() {
-    this._board = new Board(8, 8);
+    this._board = new Board(ROWS_AMOUNT, COLUMN_AMOUNT);
     this.initialSetup();
   }
 
