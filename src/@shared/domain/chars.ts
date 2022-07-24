@@ -1,4 +1,4 @@
-const chars = {
+const CHARS = {
   a: 97,
   b: 98,
   c: 99,
@@ -9,4 +9,4 @@ const chars = {
   h: 104,
 };
 
-export default chars;
+export default CHARS;
