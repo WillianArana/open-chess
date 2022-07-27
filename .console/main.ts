@@ -1,7 +1,51 @@
+import { createInterface } from 'readline';
+import { stdin as input, stdout as output } from 'node:process';
+
 import { StartChessMatchUseCase } from '../src/chess/application/start-chess-match.use-case';
+import { PerformChessMoveUseCase } from '../src/chess/application/perform-chess-move.use-case';
 import { UI } from './ui';
 
 (() => {
   const chessMatch = new StartChessMatchUseCase().execute();
-  UI.printBoard(chessMatch.pieces());
+  const chessMove = new PerformChessMoveUseCase().execute(chessMatch);
+  const rl = createInterface({ input, output });
+
+  rl.on('close', () => {
+    process.exit(0);
+  });
+
+  const question = (query: string): Promise<string> =>
+    new Promise((resolve, rejects) => {
+      try {
+        rl.question(query, (answer) => {
+          resolve(answer);
+        });
+      } catch (error) {
+        rejects(error);
+      }
+    });
+
+  const checkIfExitCommand = (answer: string) => {
+    if (answer.trim() === 'exit') {
+      rl.close();
+    }
+  };
+
+  const readLine = async () => {
+    rl.prompt();
+    UI.printBoard(chessMatch.pieces());
+    const sourceAnswer = await question('Source: ');
+    checkIfExitCommand(sourceAnswer);
+    const targetAnswer = await question('Target: ');
+    checkIfExitCommand(targetAnswer);
+
+    const source = UI.readChessPosition(sourceAnswer);
+    const target = UI.readChessPosition(targetAnswer);
+    const capturedPiece = chessMove(source, target);
+    console.log(capturedPiece);
+
+    readLine();
+  };
+
+  readLine();
 })();
