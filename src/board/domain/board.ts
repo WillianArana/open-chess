@@ -8,7 +8,7 @@ import { Position } from './position';
 type PositionType = Position | { row: number; column: number };
 
 export class Board implements BoardInterface {
-  private readonly _pieces: Piece[][];
+  private readonly _pieces: (Piece | null)[][];
 
   constructor(public readonly rows: number, public readonly columns: number) {
     if (rows < 1 || columns < 1) {
@@ -17,14 +17,14 @@ export class Board implements BoardInterface {
     this._pieces = createMatrix<Piece>(rows)(columns);
   }
 
-  public piece(position: PositionType): Piece | undefined {
+  public piece(position: PositionType): Piece | null {
     this.positionValidate(position);
     const { row, column } = position;
     return this._pieces[row][column];
   }
 
   private positionValidate(position: PositionType): void {
-    if (!this.positionExists(position)) {
+    if (!position || !this.positionExists(position)) {
       throw new BoardError('Position not on the board');
     }
   }
@@ -50,5 +50,15 @@ export class Board implements BoardInterface {
   public thereIsAPiece(position: PositionType): boolean {
     this.positionValidate(position);
     return !!this.piece(position);
+  }
+
+  public removePiece(position: PositionType): Piece | null {
+    this.positionValidate(position);
+    const piece = this.piece(position);
+    if (piece) {
+      piece.position = null;
+      this._pieces[position.row][position.column] = null;
+    }
+    return piece;
   }
 }
