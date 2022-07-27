@@ -1,3 +1,4 @@
+import { ChessPosition, Column, Row } from '../src/chess/domain/chess-position';
 import { info } from 'console';
 import { ChessPiece } from '../src/chess/domain/chess-piece';
 
@@ -22,6 +23,7 @@ export class UI {
   public static readonly ANSI_WHITE_BACKGROUND = '\u001B[47m';
 
   public static printBoard(pieces: ChessPiece[][]): void {
+    info('\n');
     for (let i = 0; i < pieces.length; i++) {
       let row = `${8 - i} `;
       for (let j = 0; j < pieces.length; j++) {
@@ -37,5 +39,15 @@ export class UI {
       info(row);
     }
     info('  a b c d e f g h');
+  }
+
+  public static readChessPosition(line: string): ChessPosition {
+    try {
+      const column = line[0] as Column;
+      const row = Number(line[1]) as Row;
+      return new ChessPosition(column, row);
+    } catch {
+      throw new Error('Error reading ChessPosition. Valid values are from a1 to h8.');
+    }
   }
 }
