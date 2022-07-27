@@ -1,15 +1,16 @@
 import { ChessMatch } from '../domain/chess-match';
 import { StartChessMatchUseCase } from './start-chess-match.use-case';
 
-describe('StartChessMatchUseCase', () => {
-  it('should be create "StartChessMatchUseCase"', () => {
+const useCase = StartChessMatchUseCase.name;
+describe(useCase, () => {
+  it(`should be create "${useCase}"`, () => {
     expect(new StartChessMatchUseCase()).toBeDefined();
   });
 
   describe('execute', () => {
     it('should start chess game', () => {
-      const useCase = new StartChessMatchUseCase();
-      const chessMatch = useCase.execute();
+      const chessMatch = new StartChessMatchUseCase().execute();
+
       expect(chessMatch).toBeInstanceOf(ChessMatch);
     });
   });

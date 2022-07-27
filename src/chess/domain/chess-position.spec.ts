@@ -2,7 +2,8 @@ import { Position } from '@src/board/domain/position';
 
 import { ChessPosition, Column, Row } from './chess-position';
 
-describe('ChessPosition', () => {
+const entity = ChessPosition.name;
+describe(entity, () => {
   it('should be create a chess position', () => {
     expect(new ChessPosition('a', 1)).toBeDefined();
   });

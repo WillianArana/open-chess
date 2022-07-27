@@ -4,7 +4,8 @@ import { ChessPiece } from '../chess-piece';
 import { Color } from '../color';
 import { Rook } from './rook';
 
-describe('Rook', () => {
+const entity = Rook.name;
+describe(entity, () => {
   it('should be create "Rook"', () => {
     expect(new Rook(new Board(1, 1), Color.White)).toBeDefined();
   });

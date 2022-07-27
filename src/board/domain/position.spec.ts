@@ -1,6 +1,7 @@
 import { Position } from './position';
 
-describe('Position', () => {
+const entity = Position.name;
+describe(entity, () => {
   it('should be create position', () => {
     const row = 0;
     const column = 1;

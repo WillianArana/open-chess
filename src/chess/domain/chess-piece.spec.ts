@@ -5,7 +5,8 @@ import { BoardInterface } from '@shared/domain/interfaces/board.interface';
 import { ChessPiece } from './chess-piece';
 import { Color } from './color';
 
-describe('ChessPiece', () => {
+const entity = ChessPiece.name;
+describe(entity, () => {
   it('should be create a chess piece', () => {
     const board = {} as BoardInterface;
     expect(new ChessPiece(board, Color.Black)).toBeDefined();

@@ -3,7 +3,8 @@ import { Piece } from './piece';
 
 class PieceMock extends Piece {}
 
-describe('Piece', () => {
+const entity = Piece.name;
+describe(entity, () => {
   it('should be create piece', () => {
     const board = new Board(2, 3);
     const piece = new PieceMock(board);
