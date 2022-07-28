@@ -32,19 +32,24 @@ import { UI } from './ui';
   };
 
   const readLine = async () => {
-    rl.prompt();
-    UI.printBoard(chessMatch.pieces());
-    const sourceAnswer = await question('Source: ');
-    checkIfExitCommand(sourceAnswer);
-    const targetAnswer = await question('Target: ');
-    checkIfExitCommand(targetAnswer);
+    try {
+      rl.prompt();
+      UI.clearScreen();
+      UI.printBoard(chessMatch.pieces());
+      const sourceAnswer = await question('Source: ');
+      checkIfExitCommand(sourceAnswer);
+      const targetAnswer = await question('Target: ');
+      checkIfExitCommand(targetAnswer);
 
-    const source = UI.readChessPosition(sourceAnswer);
-    const target = UI.readChessPosition(targetAnswer);
-    const capturedPiece = chessMove(source, target);
-    console.log(capturedPiece);
-
-    readLine();
+      const source = UI.readChessPosition(sourceAnswer);
+      const target = UI.readChessPosition(targetAnswer);
+      const capturedPiece = chessMove(source, target);
+      console.log(capturedPiece);
+    } catch (error) {
+      await question(`${error}`);
+    } finally {
+      readLine();
+    }
   };
 
   readLine();

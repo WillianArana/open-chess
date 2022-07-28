@@ -1,5 +1,5 @@
 import { ChessPosition, Column, Row } from '../src/chess/domain/chess-position';
-import { info } from 'console';
+import { info, clear } from 'console';
 import { ChessPiece } from '../src/chess/domain/chess-piece';
 
 export class UI {
@@ -47,7 +47,11 @@ export class UI {
       const row = Number(line[1]) as Row;
       return new ChessPosition(column, row);
     } catch {
-      throw new Error('Error reading ChessPosition. Valid values are from a1 to h8.');
+      throw new Error('Reading ChessPosition. Valid values are from a1 to h8.');
     }
+  }
+
+  public static clearScreen(): void {
+    clear();
   }
 }
