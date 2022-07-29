@@ -5,22 +5,28 @@ import { BoardInterface } from '@shared/domain/interfaces/board.interface';
 import { ChessPiece } from './chess-piece';
 import { Color } from './color';
 
+class ChessPieceMock extends ChessPiece {
+  public possibleMoves(): boolean[][] {
+    return this.createMatrixPossibleMoves();
+  }
+}
+
 const entity = ChessPiece.name;
 describe(entity, () => {
   it('should be create a chess piece', () => {
     const board = {} as BoardInterface;
-    expect(new ChessPiece(board, Color.Black)).toBeDefined();
+    expect(new ChessPieceMock(board, Color.Black)).toBeDefined();
   });
 
   it('should get board', () => {
-    const board = new Board(2, 3);
-    const piece = new ChessPiece(board, Color.White);
+    const board = new Board(9, 9);
+    const piece = new ChessPieceMock(board, Color.White);
     expect(piece.board).toBeInstanceOf(Board);
   });
 
   it('should get color', () => {
-    const board = new Board(2, 3);
-    const piece = new ChessPiece(board, Color.White);
+    const board = new Board(6, 6);
+    const piece = new ChessPieceMock(board, Color.White);
     expect(piece.color).toBe(Color.White);
     expect(piece.isWhite).toBeTruthy();
   });
