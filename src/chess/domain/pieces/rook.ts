@@ -14,55 +14,22 @@ export class Rook extends ChessPiece {
   }
 
   private possibleAboveMoves(possibleMoves: boolean[][]): void {
-    const createPosition = (row: number, column: number) => ({
-      row: --row,
-      column,
-    });
+    const createPosition = (row: number, column: number) => new Position(row - 1, column);
     this.setPossibleMoves(possibleMoves, createPosition);
   }
 
-  private setPossibleMoves(
-    possibleMoves: boolean[][],
-    createPosition: (
-      row: number,
-      column: number
-    ) => {
-      row: number;
-      column: number;
-    }
-  ): void {
-    const piecePosition = this.position as Position;
-    let position = createPosition(piecePosition.row, piecePosition.column);
-    while (this.canMoveInEmptyPosition(position)) {
-      possibleMoves[position.row][position.column] = true;
-      position = createPosition(position.row, position.column);
-    }
-    if (this.canMoveInOpponentPosition(position)) {
-      possibleMoves[position.row][position.column] = true;
-    }
-  }
-
   private possibleLeftMoves(possibleMoves: boolean[][]): void {
-    const createPosition = (row: number, column: number) => ({
-      row,
-      column: --column,
-    });
+    const createPosition = (row: number, column: number) => new Position(row, column - 1);
     this.setPossibleMoves(possibleMoves, createPosition);
   }
 
   private possibleRightMoves(possibleMoves: boolean[][]): void {
-    const createPosition = (row: number, column: number) => ({
-      row,
-      column: ++column,
-    });
+    const createPosition = (row: number, column: number) => new Position(row, column + 1);
     this.setPossibleMoves(possibleMoves, createPosition);
   }
 
   private possibleBelowMoves(possibleMoves: boolean[][]): void {
-    const createPosition = (row: number, column: number) => ({
-      row: ++row,
-      column,
-    });
+    const createPosition = (row: number, column: number) => new Position(row + 1, column);
     this.setPossibleMoves(possibleMoves, createPosition);
   }
 

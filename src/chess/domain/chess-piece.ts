@@ -16,6 +16,25 @@ export abstract class ChessPiece extends Piece {
     return this.color === Color.White;
   }
 
+  protected setPossibleMoves(
+    possibleMoves: boolean[][],
+    createPosition: (row: number, column: number) => Position
+  ): void {
+    const piecePosition = this.position as Position;
+    let position = createPosition(piecePosition.row, piecePosition.column);
+    while (this.canMoveInEmptyPosition(position)) {
+      possibleMoves[position.row][position.column] = true;
+      position = createPosition(position.row, position.column);
+    }
+    if (this.canMoveInOpponentPosition(position)) {
+      possibleMoves[position.row][position.column] = true;
+    }
+  }
+
+  protected canMoveInEmptyPosition(position: Position): boolean {
+    return this.board.positionExists(position) && !this.board.thereIsAPiece(position);
+  }
+
   protected canMoveInOpponentPosition(position: Position): boolean {
     return this.board.positionExists(position) && this.isThereOpponentPiece(position);
   }
@@ -23,9 +42,5 @@ export abstract class ChessPiece extends Piece {
   protected isThereOpponentPiece(position: Position): boolean {
     const piece = this.board.piece(position) as ChessPiece | null;
     return piece?.color !== this.color;
-  }
-
-  protected canMoveInEmptyPosition(position: Position): boolean {
-    return this.board.positionExists(position) && !this.board.thereIsAPiece(position);
   }
 }
