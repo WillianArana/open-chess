@@ -26,7 +26,7 @@ describe(entity, () => {
   });
 
   describe('performChessMove', () => {
-    it('should be perform chess move', () => {
+    it.skip('should be perform chess move', () => {
       const chessMatch = new ChessMatch();
       const source = new ChessPosition('e', 1);
       const target = new ChessPosition('e', 2);
@@ -34,13 +34,33 @@ describe(entity, () => {
       expect(capturedPiece).toEqual(null);
     });
 
-    it('should throw error when made a invalid  move', () => {
+    it('should throw an error when there is no piece on source position', () => {
       const chessMatch = new ChessMatch();
       const source = new ChessPosition('a', 3);
       const target = new ChessPosition('a', 5);
 
       expect(() => chessMatch.performChessMove(source, target)).toThrowError(
         'There is no piece on source position'
+      );
+    });
+
+    it('should throw an error when there is no possible moves for the chosen piece', () => {
+      const chessMatch = new ChessMatch();
+      const source = new ChessPosition('e', 1);
+      const target = new ChessPosition('e', 2);
+
+      expect(() => chessMatch.performChessMove(source, target)).toThrowError(
+        'There is no possible moves for the chosen piece'
+      );
+    });
+
+    it(`should throw an error when there chose piece can't move to target position`, () => {
+      const chessMatch = new ChessMatch();
+      const source = new ChessPosition('e', 2);
+      const target = new ChessPosition('e', 1);
+
+      expect(() => chessMatch.performChessMove(source, target)).toThrowError(
+        `There chose piece can't move to target position`
       );
     });
   });

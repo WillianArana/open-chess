@@ -43,6 +43,7 @@ export class ChessMatch {
 
     //#region WHITE PIECES
     this.placeNewPiece('e', 1, new King(board, Color.White));
+    this.placeNewPiece('e', 2, new Rook(board, Color.White));
     //#endregion
 
     //#region BLACK PIECES
@@ -63,12 +64,22 @@ export class ChessMatch {
     const source = sourcePosition.toPosition();
     const target = targetPosition.toPosition();
     this.validateSourcePosition(source);
+    this.validateTargetPosition(source, target);
     return this.makeMove(source, target) as ChessPiece | null;
   }
 
   private validateSourcePosition(position: Position): void {
     if (!this._board.thereIsAPiece(position)) {
       throw new ChessError('There is no piece on source position');
+    }
+    if (!this._board.piece(position)?.isThereAnyPossibleMove()) {
+      throw new ChessError('There is no possible moves for the chosen piece');
+    }
+  }
+
+  private validateTargetPosition(source: Position, target: Position): void {
+    if (!this._board.piece(source)?.possibleMove(target)) {
+      throw new ChessError(`There chose piece can't move to target position`);
     }
   }
 
