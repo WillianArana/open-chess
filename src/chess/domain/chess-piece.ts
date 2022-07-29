@@ -23,8 +23,9 @@ export abstract class ChessPiece extends Piece {
     const piecePosition = this.position as Position;
     let position = createPosition(piecePosition.row, piecePosition.column);
     while (this.canMoveInEmptyPosition(position)) {
-      possibleMoves[position.row][position.column] = true;
-      position = createPosition(position.row, position.column);
+      const { row, column } = position;
+      possibleMoves[row][column] = true;
+      position = createPosition(row, column);
     }
     if (this.canMoveInOpponentPosition(position)) {
       possibleMoves[position.row][position.column] = true;
