@@ -35,10 +35,10 @@ describe(entity, () => {
   });
 
   describe('performChessMove', () => {
-    it.skip('should be perform chess move', () => {
+    it('should be perform chess move', () => {
       const chessMatch = new ChessMatch();
-      const source = new ChessPosition('e', 1);
-      const target = new ChessPosition('e', 2);
+      const source = new ChessPosition('e', 2);
+      const target = new ChessPosition('e', 3);
       const capturedPiece = chessMatch.performChessMove(source, target);
       expect(capturedPiece).toEqual(null);
     });

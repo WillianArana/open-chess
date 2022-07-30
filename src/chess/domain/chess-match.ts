@@ -44,11 +44,15 @@ export class ChessMatch {
     //#region WHITE PIECES
     this.placeNewPiece('e', 1, new King(board, Color.White));
     this.placeNewPiece('e', 2, new Rook(board, Color.White));
+    this.placeNewPiece('d', 2, new Rook(board, Color.White));
+    this.placeNewPiece('f', 2, new Rook(board, Color.White));
+    this.placeNewPiece('d', 1, new Rook(board, Color.White));
+    this.placeNewPiece('f', 1, new Rook(board, Color.White));
     //#endregion
 
     //#region BLACK PIECES
     this.placeNewPiece('e', 8, new King(board, Color.Black));
-    this.placeNewPiece('b', 6, new Rook(board, Color.White));
+    this.placeNewPiece('b', 6, new Rook(board, Color.Black));
     //#endregion
   }
 
