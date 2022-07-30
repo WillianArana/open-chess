@@ -5,23 +5,22 @@ import { ChessPiece } from '../chess-piece';
 import { Color } from '../color';
 import { Rook } from './rook';
 
-const entity = Rook.name;
-describe(entity, () => {
-  it('should be create "Rook"', () => {
+describe('Rook', () => {
+  it(`should be a "Rook"`, () => {
     expect(new Rook(new Board(1, 1), Color.White)).toBeDefined();
   });
 
-  it(`should be a "${ChessPiece.name}"`, () => {
+  it(`should be a "Rook"`, () => {
     expect(new Rook(new Board(1, 1), Color.White)).toBeInstanceOf(ChessPiece);
   });
 
   describe('toString', () => {
-    it('should get white Rook', () => {
+    it('should get white piece', () => {
       const piece = new Rook(new Board(8, 8), Color.White);
       expect(piece.toString()).toBe('♖');
     });
 
-    it('should get black Rook', () => {
+    it('should get black piece', () => {
       const piece = new Rook(new Board(8, 8), Color.Black);
       expect(piece.toString()).toBe('♜');
     });

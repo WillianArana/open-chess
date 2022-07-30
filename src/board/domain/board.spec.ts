@@ -3,8 +3,7 @@ import { Piece } from '@shared/domain/piece';
 import { Board } from './board';
 import { Position } from './position';
 
-const entity = Board.name;
-describe(entity, () => {
+describe('Board', () => {
   it('should be create board', () => {
     expect(new Board(1, 1)).toBeDefined();
   });
@@ -44,7 +43,7 @@ describe(entity, () => {
     it('should be place a piece', () => {
       const board = new Board(8, 8);
       const position = new Position(3, 2);
-      const piece = { position, board } as Piece;
+      const piece = { position, board } as unknown as Piece;
       board.placePiece(piece, position);
       expect(board.thereIsAPiece(position)).toBeTruthy();
     });
@@ -52,7 +51,7 @@ describe(entity, () => {
     it('should throw error when place a piece', () => {
       const board = new Board(8, 8);
       const position = new Position(5, 5);
-      const piece = { position, board } as Piece;
+      const piece = { position, board } as unknown as Piece;
       board.placePiece(piece, position);
       expect(() => board.placePiece(piece, position)).toThrowError(
         `There is already a piece on position ${position}`
@@ -64,7 +63,7 @@ describe(entity, () => {
     it('should remove a piece', () => {
       const board = new Board(8, 8);
       const position = new Position(3, 2);
-      const piece = { position, board } as Piece;
+      const piece = { position, board } as unknown as Piece;
       board.placePiece(piece, position);
       expect(board.removePiece(position)).toEqual(piece);
     });
