@@ -40,7 +40,7 @@ export abstract class ChessPiece extends Piece {
     return this.board.positionExists(position) && this.isThereOpponentPiece(position);
   }
 
-  protected isThereOpponentPiece(position: Position): boolean {
+  private isThereOpponentPiece(position: Position): boolean {
     const piece = this.board.piece(position) as ChessPiece | null;
     return piece?.color !== this.color;
   }

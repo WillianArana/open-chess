@@ -11,8 +11,7 @@ class ChessPieceMock extends ChessPiece {
   }
 }
 
-const entity = ChessPiece.name;
-describe(entity, () => {
+describe('ChessPiece', () => {
   it('should be create a chess piece', () => {
     const board = {} as BoardInterface;
     expect(new ChessPieceMock(board, Color.Black)).toBeDefined();
