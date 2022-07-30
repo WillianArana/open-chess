@@ -57,6 +57,12 @@ export class ChessMatch {
     this._board.placePiece(piece, position);
   }
 
+  public possibleMoves(sourcePosition: ChessPosition): boolean[][] {
+    const position = sourcePosition.toPosition();
+    this.validateSourcePosition(position);
+    return (this._board.piece(position) as Piece).possibleMoves();
+  }
+
   public performChessMove(
     sourcePosition: ChessPosition,
     targetPosition: ChessPosition

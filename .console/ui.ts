@@ -23,22 +23,51 @@ export class UI {
   public static readonly ANSI_WHITE_BACKGROUND = '\u001B[47m';
 
   public static printBoard(pieces: ChessPiece[][]): void {
+    const getPieceInRow = (i: number, j: number, row: string) => {
+      const piece = pieces[i][j] as ChessPiece | null;
+      return UI.getPieceInRow(row, piece);
+    };
+    UI.printLayout(pieces, getPieceInRow);
+  }
+
+  private static printLayout(
+    pieces: ChessPiece[][],
+    getPieceInRow: (i: number, j: number, row: string) => string
+  ): void {
     info('\n');
     for (let i = 0; i < pieces.length; i++) {
       let row = `${8 - i} `;
       for (let j = 0; j < pieces.length; j++) {
-        const piece = pieces[i][j] as ChessPiece | null;
-        if (piece) {
-          row += piece.isWhite ? `${UI.ANSI_WHITE}${piece}` : `${UI.ANSI_YELLOW}${piece}`;
-          row += UI.ANSI_RESET;
-        } else {
-          row += '-';
-        }
-        row += ' ';
+        row = getPieceInRow(i, j, row);
       }
       info(row);
     }
     info('  a b c d e f g h');
+  }
+
+  public static printBoardWithPossibleMoves(
+    pieces: ChessPiece[][],
+    possibleMoves: boolean[][]
+  ): void {
+    const getPieceInRow = (i: number, j: number, row: string) => {
+      const isChangeBackground = possibleMoves[i][j];
+      if (isChangeBackground) {
+        row += UI.ANSI_BLUE_BACKGROUND;
+      }
+      const piece = pieces[i][j] as ChessPiece | null;
+      return UI.getPieceInRow(row, piece);
+    };
+    UI.printLayout(pieces, getPieceInRow);
+  }
+
+  private static getPieceInRow(row: string, piece: ChessPiece | null): string {
+    if (piece) {
+      row += piece.isWhite ? `${UI.ANSI_WHITE}${piece}` : `${UI.ANSI_YELLOW}${piece}`;
+    } else {
+      row += '-';
+    }
+    row += `${UI.ANSI_RESET} `;
+    return row;
   }
 
   public static readChessPosition(line: string): ChessPosition {

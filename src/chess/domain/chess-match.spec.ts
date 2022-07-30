@@ -25,6 +25,15 @@ describe(entity, () => {
     });
   });
 
+  describe('possibleMoves', () => {
+    it('should get possible moves', () => {
+      const chessMatch = new ChessMatch();
+      const source = new ChessPosition('e', 2);
+      const possibleMoves = chessMatch.possibleMoves(source);
+      expect(possibleMoves.length).toBeGreaterThan(0);
+    });
+  });
+
   describe('performChessMove', () => {
     it.skip('should be perform chess move', () => {
       const chessMatch = new ChessMatch();

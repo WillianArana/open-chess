@@ -38,11 +38,18 @@ import { UI } from './ui';
       UI.printBoard(chessMatch.pieces());
       const sourceAnswer = await question('Source: ');
       checkIfExitCommand(sourceAnswer);
+
+      const source = UI.readChessPosition(sourceAnswer);
+
+      const possibleMoves = chessMatch.possibleMoves(source);
+      UI.clearScreen();
+      UI.printBoardWithPossibleMoves(chessMatch.pieces(), possibleMoves);
+
       const targetAnswer = await question('Target: ');
       checkIfExitCommand(targetAnswer);
 
-      const source = UI.readChessPosition(sourceAnswer);
       const target = UI.readChessPosition(targetAnswer);
+
       const capturedPiece = chessMove(source, target);
       console.log(capturedPiece);
     } catch (error) {
