@@ -1,6 +1,8 @@
 import { ChessPosition, Column, Row } from '../src/chess/domain/chess-position';
 import { info, clear } from 'console';
 import { ChessPiece } from '../src/chess/domain/chess-piece';
+import { ChessMatch } from '../src/chess/domain/chess-match';
+import { Color } from '../src/chess/domain/color';
 
 export class UI {
   public static readonly ANSI_RESET = '\u001B[0m';
@@ -21,6 +23,20 @@ export class UI {
   public static readonly ANSI_PURPLE_BACKGROUND = '\u001B[45m';
   public static readonly ANSI_CYAN_BACKGROUND = '\u001B[46m';
   public static readonly ANSI_WHITE_BACKGROUND = '\u001B[47m';
+
+  public static readonly COLOR_PIECE_WHITE = UI.ANSI_WHITE;
+  public static readonly COLOR_PIECE_BLACK = UI.ANSI_YELLOW;
+
+  static players = {
+    [Color.White]: {
+      describe: 'WHITE',
+      color: `${UI.COLOR_PIECE_WHITE}□${UI.ANSI_RESET}`,
+    },
+    [Color.Black]: {
+      describe: 'BLACK',
+      color: `${UI.COLOR_PIECE_BLACK}■${UI.ANSI_RESET}`,
+    },
+  };
 
   public static printBoard(pieces: ChessPiece[][]): void {
     const getPieceInRow = (i: number, j: number, row: string) => {
@@ -62,7 +78,7 @@ export class UI {
 
   private static getPieceInRow(row: string, piece: ChessPiece | null): string {
     if (piece) {
-      row += piece.isWhite ? `${UI.ANSI_WHITE}${piece}` : `${UI.ANSI_YELLOW}${piece}`;
+      row += piece.isWhite ? `${UI.COLOR_PIECE_WHITE}${piece}` : `${UI.COLOR_PIECE_BLACK}${piece}`;
     } else {
       row += '-';
     }
@@ -82,5 +98,14 @@ export class UI {
 
   public static clearScreen(): void {
     clear();
+  }
+
+  public static printMatch(chessMatch: ChessMatch): void {
+    UI.printBoard(chessMatch.pieces());
+    info('');
+    info('Turn:', chessMatch.turn);
+    const currentPlayer = UI.players[chessMatch.currentPlayer];
+    info('Waiting player:', currentPlayer.describe);
+    info('Color piece:', currentPlayer.color);
   }
 }

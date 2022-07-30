@@ -1,10 +1,20 @@
 import { ChessMatch } from './chess-match';
 import { ChessPosition } from './chess-position';
+import { Color } from './color';
 
-const entity = ChessMatch.name;
-describe(entity, () => {
+describe('ChessMatch', () => {
   it('should be create "ChessMatch"', () => {
     expect(new ChessMatch()).toBeDefined();
+  });
+
+  it('should be start match with "WHITE" player', () => {
+    const chessMatch = new ChessMatch();
+    expect(chessMatch.currentPlayer).toBe(Color.White);
+  });
+
+  it('should be start match with turn one', () => {
+    const chessMatch = new ChessMatch();
+    expect(chessMatch.turn).toBe(1);
   });
 
   describe('pieces', () => {
@@ -70,6 +80,16 @@ describe(entity, () => {
 
       expect(() => chessMatch.performChessMove(source, target)).toThrowError(
         `There chose piece can't move to target position`
+      );
+    });
+
+    it('should throw an error when piece is not yours', () => {
+      const chessMatch = new ChessMatch();
+      const source = new ChessPosition('e', 7);
+      const target = new ChessPosition('e', 6);
+
+      expect(() => chessMatch.performChessMove(source, target)).toThrowError(
+        'The chosen piece is not yours'
       );
     });
   });

@@ -13,13 +13,26 @@ import { Rook } from './pieces/rook';
 import ROWS_AMOUNT from './rows-amount';
 
 const COLUMN_AMOUNT = ROWS_AMOUNT;
+const switchPlayer = {
+  [Color.Black]: Color.White,
+  [Color.White]: Color.Black,
+};
 
 export class ChessMatch {
-  private readonly _board: Board;
+  private readonly _board = new Board(ROWS_AMOUNT, COLUMN_AMOUNT);
+  private _turn = 1;
+  private _currentPlayer = Color.White;
 
   constructor() {
-    this._board = new Board(ROWS_AMOUNT, COLUMN_AMOUNT);
     this.initialSetup();
+  }
+
+  get turn(): number {
+    return this._turn;
+  }
+
+  get currentPlayer(): Color {
+    return this._currentPlayer;
   }
 
   public pieces(): ChessPiece[][] {
@@ -52,7 +65,11 @@ export class ChessMatch {
 
     //#region BLACK PIECES
     this.placeNewPiece('e', 8, new King(board, Color.Black));
-    this.placeNewPiece('b', 6, new Rook(board, Color.Black));
+    this.placeNewPiece('d', 8, new Rook(board, Color.Black));
+    this.placeNewPiece('f', 8, new Rook(board, Color.Black));
+    this.placeNewPiece('d', 7, new Rook(board, Color.Black));
+    this.placeNewPiece('e', 7, new Rook(board, Color.Black));
+    this.placeNewPiece('f', 7, new Rook(board, Color.Black));
     //#endregion
   }
 
@@ -75,12 +92,18 @@ export class ChessMatch {
     const target = targetPosition.toPosition();
     this.validateSourcePosition(source);
     this.validateTargetPosition(source, target);
-    return this.makeMove(source, target) as ChessPiece | null;
+    const capturedPiece = this.makeMove(source, target) as ChessPiece | null;
+    this.nextTurn();
+    return capturedPiece;
   }
 
   private validateSourcePosition(position: Position): void {
     if (!this._board.thereIsAPiece(position)) {
       throw new ChessError('There is no piece on source position');
+    }
+    const piece = this._board.piece(position) as ChessPiece;
+    if (this._currentPlayer !== piece.color) {
+      throw new ChessError('The chosen piece is not yours');
     }
     if (!this._board.piece(position)?.isThereAnyPossibleMove()) {
       throw new ChessError('There is no possible moves for the chosen piece');
@@ -98,5 +121,10 @@ export class ChessMatch {
     const capturedPiece = this._board.removePiece(target);
     this._board.placePiece(piece, target);
     return capturedPiece;
+  }
+
+  private nextTurn(): void {
+    this._turn++;
+    this._currentPlayer = switchPlayer[this._currentPlayer];
   }
 }

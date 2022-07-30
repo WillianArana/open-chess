@@ -35,17 +35,16 @@ import { UI } from './ui';
     try {
       rl.prompt();
       UI.clearScreen();
-      UI.printBoard(chessMatch.pieces());
-      const sourceAnswer = await question('Source: ');
+      UI.printMatch(chessMatch);
+      const sourceAnswer = await question('\nSource: ');
       checkIfExitCommand(sourceAnswer);
 
       const source = UI.readChessPosition(sourceAnswer);
-
       const possibleMoves = chessMatch.possibleMoves(source);
       UI.clearScreen();
       UI.printBoardWithPossibleMoves(chessMatch.pieces(), possibleMoves);
 
-      const targetAnswer = await question('Target: ');
+      const targetAnswer = await question('\nTarget: ');
       checkIfExitCommand(targetAnswer);
 
       const target = UI.readChessPosition(targetAnswer);
