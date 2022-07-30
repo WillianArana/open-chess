@@ -19,45 +19,46 @@ export class King extends ChessPiece {
 
   private possibleAboveMove(possibleMoves: boolean[][]): void {
     const createPosition = (row: number, column: number) => new Position(row - 1, column);
-    this.setPossibleMove(possibleMoves, createPosition);
+    this.setPossibleMoves(possibleMoves, createPosition);
   }
 
   private possibleBelowMove(possibleMoves: boolean[][]): void {
     const createPosition = (row: number, column: number) => new Position(row + 1, column);
-    this.setPossibleMove(possibleMoves, createPosition);
+    this.setPossibleMoves(possibleMoves, createPosition);
   }
 
   private possibleLeftMove(possibleMoves: boolean[][]): void {
     const createPosition = (row: number, column: number) => new Position(row, column - 1);
-    this.setPossibleMove(possibleMoves, createPosition);
+    this.setPossibleMoves(possibleMoves, createPosition);
   }
 
   private possibleRightMove(possibleMoves: boolean[][]): void {
     const createPosition = (row: number, column: number) => new Position(row, column + 1);
-    this.setPossibleMove(possibleMoves, createPosition);
+    this.setPossibleMoves(possibleMoves, createPosition);
   }
 
   private possibleNorthwestMove(possibleMoves: boolean[][]): void {
     const createPosition = (row: number, column: number) => new Position(row - 1, column - 1);
-    this.setPossibleMove(possibleMoves, createPosition);
+    this.setPossibleMoves(possibleMoves, createPosition);
   }
 
   private possibleNortheastMove(possibleMoves: boolean[][]): void {
     const createPosition = (row: number, column: number) => new Position(row - 1, column + 1);
-    this.setPossibleMove(possibleMoves, createPosition);
+    this.setPossibleMoves(possibleMoves, createPosition);
   }
 
   private possibleSouthwestMove(possibleMoves: boolean[][]): void {
     const createPosition = (row: number, column: number) => new Position(row + 1, column - 1);
-    this.setPossibleMove(possibleMoves, createPosition);
+    this.setPossibleMoves(possibleMoves, createPosition);
   }
 
   private possibleSoutheastMove(possibleMoves: boolean[][]): void {
     const createPosition = (row: number, column: number) => new Position(row + 1, column + 1);
-    this.setPossibleMove(possibleMoves, createPosition);
+    this.setPossibleMoves(possibleMoves, createPosition);
   }
 
-  private setPossibleMove(
+  //@Override
+  protected setPossibleMoves(
     possibleMoves: boolean[][],
     createPosition: (row: number, column: number) => Position
   ): void {
