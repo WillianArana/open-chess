@@ -53,6 +53,14 @@ describe('ChessMatch', () => {
       expect(capturedPiece).toEqual(null);
     });
 
+    it('should be captured piece', () => {
+      const chessMatch = new ChessMatch();
+      const source = new ChessPosition('e', 2);
+      const target = new ChessPosition('e', 7);
+      const capturedPiece = chessMatch.performChessMove(source, target);
+      expect(capturedPiece).not.toEqual(null);
+    });
+
     it('should throw an error when there is no piece on source position', () => {
       const chessMatch = new ChessMatch();
       const source = new ChessPosition('a', 3);
