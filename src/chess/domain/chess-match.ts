@@ -19,6 +19,9 @@ const switchPlayer = {
 };
 
 export class ChessMatch {
+  public readonly piecesOnTheBoard: ChessPiece[] = [];
+  public readonly capturedPieces: ChessPiece[] = [];
+
   private readonly _board = new Board(ROWS_AMOUNT, COLUMN_AMOUNT);
   private _turn = 1;
   private _currentPlayer = Color.White;
@@ -76,6 +79,7 @@ export class ChessMatch {
   private placeNewPiece(column: Column, row: Row, piece: ChessPiece): void {
     const position = new ChessPosition(column, row).toPosition();
     this._board.placePiece(piece, position);
+    this.piecesOnTheBoard.push(piece);
   }
 
   public possibleMoves(sourcePosition: ChessPosition): boolean[][] {
@@ -93,6 +97,7 @@ export class ChessMatch {
     this.validateSourcePosition(source);
     this.validateTargetPosition(source, target);
     const capturedPiece = this.makeMove(source, target) as ChessPiece | null;
+    this.addPossibleCapturedPiece(capturedPiece);
     this.nextTurn();
     return capturedPiece;
   }
@@ -121,6 +126,12 @@ export class ChessMatch {
     const capturedPiece = this._board.removePiece(target);
     this._board.placePiece(piece, target);
     return capturedPiece;
+  }
+
+  private addPossibleCapturedPiece(piece: ChessPiece | null): void {
+    if (piece) {
+      this.capturedPieces.push(piece);
+    }
   }
 
   private nextTurn(): void {

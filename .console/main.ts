@@ -49,8 +49,7 @@ import { UI } from './ui';
 
       const target = UI.readChessPosition(targetAnswer);
 
-      const capturedPiece = chessMove(source, target);
-      console.log(capturedPiece);
+      chessMove(source, target);
     } catch (error) {
       await question(`${error}`);
     } finally {
