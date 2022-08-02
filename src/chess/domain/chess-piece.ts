@@ -3,6 +3,7 @@ import { Position } from '@src/board/domain/position';
 import { BoardInterface } from '@shared/domain/interfaces/board.interface';
 import { Piece } from '@shared/domain/piece';
 
+import { ChessPosition } from './chess-position';
 import { Color } from './color';
 
 export abstract class ChessPiece extends Piece {
@@ -14,6 +15,11 @@ export abstract class ChessPiece extends Piece {
 
   public get isWhite(): boolean {
     return this.color === Color.White;
+  }
+
+  public get chessPosition(): ChessPosition {
+    const piecePosition = this.position as Position;
+    return ChessPosition.fromPosition(piecePosition);
   }
 
   protected setPossibleMoves(

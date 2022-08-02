@@ -3,7 +3,7 @@ import createMatrix from './helpers/create-matrix';
 import { BoardInterface } from './interfaces/board.interface';
 
 export abstract class Piece {
-  public position: Position | null;
+  protected position: Position | null;
   constructor(public readonly board: BoardInterface) {
     this.position = null;
   }

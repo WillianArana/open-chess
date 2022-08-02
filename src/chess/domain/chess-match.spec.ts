@@ -17,6 +17,11 @@ describe('ChessMatch', () => {
     expect(chessMatch.turn).toBe(1);
   });
 
+  it('should be not is check', () => {
+    const chessMatch = new ChessMatch();
+    expect(chessMatch.isCheck).toBe(false);
+  });
+
   describe('pieces', () => {
     it('should get pieces', () => {
       const chessMatch = new ChessMatch();
@@ -98,6 +103,24 @@ describe('ChessMatch', () => {
 
       expect(() => chessMatch.performChessMove(source, target)).toThrowError(
         'The chosen piece is not yours'
+      );
+    });
+
+    it('should throw an error when player putt yourself in check', () => {
+      const chessMatch = new ChessMatch();
+      let source = new ChessPosition('e', 2);
+      let target = new ChessPosition('e', 7);
+      chessMatch.performChessMove(source, target);
+
+      source = new ChessPosition('d', 7);
+      target = new ChessPosition('e', 7);
+      chessMatch.performChessMove(source, target);
+
+      source = new ChessPosition('d', 2);
+      target = new ChessPosition('d', 8);
+
+      expect(() => chessMatch.performChessMove(source, target)).toThrowError(
+        `You can't putt yourself in check`
       );
     });
   });

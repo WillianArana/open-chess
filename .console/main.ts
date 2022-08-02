@@ -36,7 +36,7 @@ import { UI } from './ui';
       rl.prompt();
       UI.clearScreen();
       UI.printMatch(chessMatch);
-      const sourceAnswer = await question('\nSource: ');
+      const sourceAnswer = (await question('\nSource: ')).toLowerCase();
       checkIfExitCommand(sourceAnswer);
 
       const source = UI.readChessPosition(sourceAnswer);
@@ -44,7 +44,7 @@ import { UI } from './ui';
       UI.clearScreen();
       UI.printBoardWithPossibleMoves(chessMatch.pieces(), possibleMoves);
 
-      const targetAnswer = await question('\nTarget: ');
+      const targetAnswer = (await question('\nTarget: ')).toLowerCase();
       checkIfExitCommand(targetAnswer);
 
       const target = UI.readChessPosition(targetAnswer);

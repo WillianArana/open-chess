@@ -25,6 +25,7 @@ export class ChessMatch {
   private readonly _board = new Board(ROWS_AMOUNT, COLUMN_AMOUNT);
   private _turn = 1;
   private _currentPlayer = Color.White;
+  private _check = false;
 
   constructor() {
     this.initialSetup();
@@ -36,6 +37,10 @@ export class ChessMatch {
 
   get currentPlayer(): Color {
     return this._currentPlayer;
+  }
+
+  get isCheck(): boolean {
+    return this._check;
   }
 
   public pieces(): ChessPiece[][] {
@@ -98,6 +103,8 @@ export class ChessMatch {
     this.validateTargetPosition(source, target);
     const capturedPiece = this.makeMove(source, target) as ChessPiece | null;
     this.addPossibleCapturedPiece(capturedPiece);
+    this.checkIfPuttYourselfInCheck(source, target, capturedPiece);
+    this._check = this.testCheck(this.opponent(this._currentPlayer));
     this.nextTurn();
     return capturedPiece;
   }
@@ -131,11 +138,60 @@ export class ChessMatch {
   private addPossibleCapturedPiece(piece: ChessPiece | null): void {
     if (piece) {
       this.capturedPieces.push(piece);
+      const index = this.piecesOnTheBoard.indexOf(piece);
+      if (index > -1) {
+        this.piecesOnTheBoard.splice(index, 1);
+      }
+    }
+  }
+
+  private checkIfPuttYourselfInCheck(
+    source: Position,
+    target: Position,
+    capturedPiece: ChessPiece | null
+  ): void {
+    if (this.testCheck(this._currentPlayer)) {
+      this.undoMove(source, target, capturedPiece);
+      throw new ChessError(`You can't putt yourself in check`);
+    }
+  }
+  private testCheck(color: Color): boolean {
+    const { row, column } = this.king(color).chessPosition.toPosition();
+    const opponentPieces = this.piecesOnTheBoard.filter((p) => p.color === this.opponent(color));
+    const isCheck = opponentPieces.some((p) => p.possibleMoves()[row][column]);
+    return isCheck;
+  }
+
+  private undoMove(source: Position, target: Position, capturedPiece: ChessPiece | null): void {
+    const piece = this._board.removePiece(target) as ChessPiece;
+    this._board.placePiece(piece, source);
+
+    if (capturedPiece) {
+      this._board.placePiece(capturedPiece, target);
+      this.removeCapturedPiece(capturedPiece);
+    }
+  }
+
+  private removeCapturedPiece(piece: ChessPiece): void {
+    this.piecesOnTheBoard.push(piece);
+    const index = this.capturedPieces.indexOf(piece);
+    if (index > -1) {
+      this.capturedPieces.splice(index, 1);
     }
   }
 
   private nextTurn(): void {
     this._turn++;
-    this._currentPlayer = switchPlayer[this._currentPlayer];
+    this._currentPlayer = this.opponent(this._currentPlayer);
+  }
+
+  private opponent(color: Color): Color {
+    return switchPlayer[color];
+  }
+
+  private king(color: Color): ChessPiece {
+    return this.piecesOnTheBoard
+      .filter((p) => p.color === color)
+      .find((p) => p instanceof King) as ChessPiece;
   }
 }

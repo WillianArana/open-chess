@@ -29,7 +29,7 @@ describe('Rook', () => {
   describe('possibleMoves', () => {
     it('should get possible moves with empty board', () => {
       const piece = new Rook(new Board(8, 8), Color.White);
-      piece.position = new Position(3, 3);
+      (piece as any).position = new Position(3, 3);
       const rookPossibleMoves = (i: number, j: number) =>
         (i === 0 && j === 3) ||
         (i === 1 && j === 3) ||

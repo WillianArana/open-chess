@@ -80,7 +80,7 @@ export class UI {
     if (piece) {
       row += piece.isWhite ? `${UI.COLOR_PIECE_WHITE}${piece}` : `${UI.COLOR_PIECE_BLACK}${piece}`;
     } else {
-      row += '-';
+      row += '–';
     }
     row += `${UI.ANSI_RESET} `;
     return row;
@@ -102,20 +102,21 @@ export class UI {
 
   public static printMatch(chessMatch: ChessMatch): void {
     UI.printBoard(chessMatch.pieces());
-    info('');
     UI.printCapturedPieces(chessMatch.capturedPieces);
-    info('');
     info('Turn:', chessMatch.turn);
     const currentPlayer = UI.players[chessMatch.currentPlayer];
     info('Waiting player:', currentPlayer.describe);
-    info('Color piece:', currentPlayer.color);
+    info('Piece style:', currentPlayer.color);
+    if (chessMatch.isCheck) {
+      info('\nCHECK!');
+    }
   }
 
   private static printCapturedPieces(captured: ChessPiece[]): void {
     const white = captured.filter((p) => p.isWhite);
     const black = captured.filter((p) => !p.isWhite);
     info('Captured pieces:');
-    info('White:', UI.COLOR_PIECE_WHITE, white.join(' '), UI.ANSI_RESET);
-    info('Black:', UI.COLOR_PIECE_BLACK, black.join(' '), UI.ANSI_RESET);
+    info(' White:', UI.COLOR_PIECE_WHITE, white.join(' '), UI.ANSI_RESET);
+    info(' Black:', UI.COLOR_PIECE_BLACK, black.join(' '), UI.ANSI_RESET);
   }
 }

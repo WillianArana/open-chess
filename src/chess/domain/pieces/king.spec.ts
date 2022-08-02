@@ -29,7 +29,7 @@ describe('King', () => {
   describe('possibleMoves', () => {
     it('should get possible moves with empty board', () => {
       const piece = new King(new Board(8, 8), Color.White);
-      piece.position = new Position(3, 3);
+      (piece as any).position = new Position(3, 3);
       const kingPossibleMoves = (i: number, j: number) =>
         (i === 2 && j === 2) ||
         (i === 2 && j === 3) ||
