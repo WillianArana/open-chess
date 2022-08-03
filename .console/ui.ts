@@ -105,10 +105,15 @@ export class UI {
     UI.printCapturedPieces(chessMatch.capturedPieces);
     info('Turn:', chessMatch.turn);
     const currentPlayer = UI.players[chessMatch.currentPlayer];
-    info('Waiting player:', currentPlayer.describe);
-    info('Piece style:', currentPlayer.color);
-    if (chessMatch.isCheck) {
-      info('\nCHECK!');
+    if (chessMatch.isCheckMate) {
+      info('\nCHECKMATE!');
+      info('Winner:', currentPlayer.describe);
+    } else {
+      info('Waiting player:', currentPlayer.describe);
+      info('Piece style:', currentPlayer.color);
+      if (chessMatch.isCheck) {
+        info('\nCHECK!');
+      }
     }
   }
 

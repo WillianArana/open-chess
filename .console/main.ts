@@ -53,7 +53,13 @@ import { UI } from './ui';
     } catch (error) {
       await question(`${error}`);
     } finally {
-      readLine();
+      if (chessMatch.isCheckMate) {
+        UI.clearScreen();
+        UI.printMatch(chessMatch);
+        rl.close();
+      } else {
+        readLine();
+      }
     }
   };
 

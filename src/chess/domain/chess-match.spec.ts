@@ -1,6 +1,8 @@
 import { ChessMatch } from './chess-match';
 import { ChessPosition } from './chess-position';
 import { Color } from './color';
+import { King } from './pieces/king';
+import { Rook } from './pieces/rook';
 
 describe('ChessMatch', () => {
   it('should be create "ChessMatch"', () => {
@@ -106,22 +108,63 @@ describe('ChessMatch', () => {
       );
     });
 
-    it('should throw an error when player putt yourself in check', () => {
-      const chessMatch = new ChessMatch();
+    it('should throw an error when player put yourself in check', () => {
+      class ChessMatchMock extends ChessMatch {
+        protected initialSetup(): void {
+          const board = this.board;
+          this.placeNewPiece('e', 1, new King(board, Color.White));
+          this.placeNewPiece('e', 2, new Rook(board, Color.White));
+          this.placeNewPiece('d', 2, new Rook(board, Color.White));
+          this.placeNewPiece('f', 2, new Rook(board, Color.White));
+          this.placeNewPiece('d', 1, new Rook(board, Color.White));
+          this.placeNewPiece('f', 1, new Rook(board, Color.White));
+
+          this.placeNewPiece('e', 8, new King(board, Color.Black));
+          this.placeNewPiece('d', 8, new Rook(board, Color.Black));
+          this.placeNewPiece('f', 8, new Rook(board, Color.Black));
+          this.placeNewPiece('d', 7, new Rook(board, Color.Black));
+          this.placeNewPiece('e', 7, new Rook(board, Color.Black));
+          this.placeNewPiece('f', 7, new Rook(board, Color.Black));
+        }
+      }
+
+      const chessMatchMock = new ChessMatchMock();
       let source = new ChessPosition('e', 2);
       let target = new ChessPosition('e', 7);
-      chessMatch.performChessMove(source, target);
+      chessMatchMock.performChessMove(source, target);
 
       source = new ChessPosition('d', 7);
       target = new ChessPosition('e', 7);
-      chessMatch.performChessMove(source, target);
+      chessMatchMock.performChessMove(source, target);
 
       source = new ChessPosition('d', 2);
       target = new ChessPosition('d', 8);
 
-      expect(() => chessMatch.performChessMove(source, target)).toThrowError(
-        `You can't putt yourself in check`
+      expect(() => chessMatchMock.performChessMove(source, target)).toThrowError(
+        `You can't put yourself in check`
       );
+    });
+
+    it('should be checkmate', () => {
+      class ChessMatchMock extends ChessMatch {
+        protected initialSetup(): void {
+          const board = this.board;
+          this.placeNewPiece('h', 7, new Rook(board, Color.White));
+          this.placeNewPiece('d', 1, new Rook(board, Color.White));
+          this.placeNewPiece('e', 1, new King(board, Color.White));
+
+          this.placeNewPiece('b', 8, new Rook(board, Color.Black));
+          this.placeNewPiece('a', 8, new King(board, Color.Black));
+        }
+      }
+
+      const chessMatchMock = new ChessMatchMock();
+      let source = new ChessPosition('d', 1);
+      let target = new ChessPosition('a', 1);
+      chessMatchMock.performChessMove(source, target);
+
+      expect(chessMatchMock.isCheck).toBeTruthy();
+      expect(chessMatchMock.isCheckMate).toBeTruthy();
     });
   });
 });

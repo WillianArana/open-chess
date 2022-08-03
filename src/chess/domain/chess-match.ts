@@ -26,6 +26,7 @@ export class ChessMatch {
   private _turn = 1;
   private _currentPlayer = Color.White;
   private _check = false;
+  private _checkMate = false;
 
   constructor() {
     this.initialSetup();
@@ -41,6 +42,14 @@ export class ChessMatch {
 
   get isCheck(): boolean {
     return this._check;
+  }
+
+  get isCheckMate(): boolean {
+    return this._checkMate;
+  }
+
+  protected get board(): Board {
+    return this._board;
   }
 
   public pieces(): ChessPiece[][] {
@@ -59,7 +68,7 @@ export class ChessMatch {
     }
   }
 
-  private initialSetup(): void {
+  protected initialSetup(): void {
     const board = this._board;
 
     //#region WHITE PIECES
@@ -81,7 +90,7 @@ export class ChessMatch {
     //#endregion
   }
 
-  private placeNewPiece(column: Column, row: Row, piece: ChessPiece): void {
+  protected placeNewPiece(column: Column, row: Row, piece: ChessPiece): void {
     const position = new ChessPosition(column, row).toPosition();
     this._board.placePiece(piece, position);
     this.piecesOnTheBoard.push(piece);
@@ -103,9 +112,9 @@ export class ChessMatch {
     this.validateTargetPosition(source, target);
     const capturedPiece = this.makeMove(source, target) as ChessPiece | null;
     this.addPossibleCapturedPiece(capturedPiece);
-    this.checkIfPuttYourselfInCheck(source, target, capturedPiece);
-    this._check = this.testCheck(this.opponent(this._currentPlayer));
-    this.nextTurn();
+    this.verifyIfPutYourselfInCheck(source, target, capturedPiece);
+    this.loadStatus();
+    this.isCheckMate || this.nextTurn();
     return capturedPiece;
   }
 
@@ -145,16 +154,23 @@ export class ChessMatch {
     }
   }
 
-  private checkIfPuttYourselfInCheck(
+  private verifyIfPutYourselfInCheck(
     source: Position,
     target: Position,
     capturedPiece: ChessPiece | null
   ): void {
     if (this.testCheck(this._currentPlayer)) {
       this.undoMove(source, target, capturedPiece);
-      throw new ChessError(`You can't putt yourself in check`);
+      throw new ChessError(`You can't put yourself in check`);
     }
   }
+
+  private loadStatus(): void {
+    const opponent = this.opponent(this._currentPlayer);
+    this._check = this.testCheck(opponent);
+    this._checkMate = this._check && this.testCheckMate(opponent);
+  }
+
   private testCheck(color: Color): boolean {
     const { row, column } = this.king(color).chessPosition.toPosition();
     const opponentPieces = this.piecesOnTheBoard.filter((p) => p.color === this.opponent(color));
@@ -190,8 +206,34 @@ export class ChessMatch {
   }
 
   private king(color: Color): ChessPiece {
-    return this.piecesOnTheBoard
-      .filter((p) => p.color === color)
-      .find((p) => p instanceof King) as ChessPiece;
+    return this.piecesOnTheBoard.find((p) => p instanceof King && p.color === color) as ChessPiece;
+  }
+
+  private testCheckMate(color: Color): boolean {
+    return !this.piecesOnTheBoard.some(
+      (p) => p.color === color && this.tryPullOutCheckMate(color, p)
+    );
+  }
+
+  private tryPullOutCheckMate(color: Color, piece: ChessPiece): boolean {
+    const possibleMoves = piece.possibleMoves();
+    for (let row = 0; row < this._board.rows; row++) {
+      for (let column = 0; column < this._board.columns; column++) {
+        if (possibleMoves[row][column]) {
+          const target = new Position(row, column);
+          const isCheck = this.testMoveToPullOutCheckMate(color, piece, target);
+          if (!isCheck) return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private testMoveToPullOutCheckMate(color: Color, piece: ChessPiece, target: Position): boolean {
+    const source = piece.chessPosition.toPosition();
+    const capturedPiece = this.makeMove(source, target) as ChessPiece | null;
+    const testCheck = this.testCheck(color);
+    this.undoMove(source, target, capturedPiece);
+    return testCheck;
   }
 }

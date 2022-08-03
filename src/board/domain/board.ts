@@ -6,6 +6,7 @@ import { BoardError } from './board.error';
 import { Position } from './position';
 
 type PositionType = Position | { row: number; column: number };
+type PieceType = Piece & { position: PositionType | null };
 
 export class Board implements BoardInterface {
   private readonly _pieces: (Piece | null)[][];
@@ -38,7 +39,7 @@ export class Board implements BoardInterface {
     this.placePieceValidate(position);
     const { row, column } = position;
     this._pieces[row][column] = piece;
-    piece.position = position;
+    (piece as PieceType).position = position;
   }
 
   private placePieceValidate(position: PositionType): void {
@@ -56,7 +57,7 @@ export class Board implements BoardInterface {
     this.positionValidate(position);
     const piece = this.piece(position);
     if (piece) {
-      piece.position = null;
+      (piece as PieceType).position = null;
       this._pieces[position.row][position.column] = null;
     }
     return piece;
