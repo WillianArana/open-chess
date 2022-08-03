@@ -26,15 +26,16 @@ export abstract class ChessPiece extends Piece {
     possibleMoves: boolean[][],
     createPosition: (row: number, column: number) => Position
   ): void {
-    const piecePosition = this.position as Position;
-    let position = createPosition(piecePosition.row, piecePosition.column);
-    while (this.canMoveInEmptyPosition(position)) {
-      const { row, column } = position;
-      possibleMoves[row][column] = true;
-      position = createPosition(row, column);
-    }
-    if (this.canMoveInOpponentPosition(position)) {
-      possibleMoves[position.row][position.column] = true;
+    if (this.position) {
+      let position = createPosition(this.position.row, this.position.column);
+      while (this.canMoveInEmptyPosition(position)) {
+        const { row, column } = position;
+        possibleMoves[row][column] = true;
+        position = createPosition(row, column);
+      }
+      if (this.canMoveInOpponentPosition(position)) {
+        possibleMoves[position.row][position.column] = true;
+      }
     }
   }
 
