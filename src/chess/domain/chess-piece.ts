@@ -8,6 +8,7 @@ import { Color } from './color';
 
 export abstract class ChessPiece extends Piece {
   public readonly color: Color;
+  private _moveCount = 0;
   constructor(board: BoardInterface, color: Color) {
     super(board);
     this.color = color;
@@ -20,6 +21,14 @@ export abstract class ChessPiece extends Piece {
   public get chessPosition(): ChessPosition {
     const piecePosition = this.position as Position;
     return ChessPosition.fromPosition(piecePosition);
+  }
+
+  public increaseMoveCount(): void {
+    this._moveCount++;
+  }
+
+  public decreaseMoveCount(): void {
+    this._moveCount--;
   }
 
   protected setPossibleMoves(

@@ -138,7 +138,8 @@ export class ChessMatch {
   }
 
   private makeMove(source: Position, target: Position): Piece | null {
-    const piece = this._board.removePiece(source) as Piece;
+    const piece = this._board.removePiece(source) as ChessPiece;
+    piece.increaseMoveCount();
     const capturedPiece = this._board.removePiece(target);
     this._board.placePiece(piece, target);
     return capturedPiece;
@@ -183,6 +184,7 @@ export class ChessMatch {
     this._board.placePiece(piece, source);
 
     if (capturedPiece) {
+      capturedPiece.decreaseMoveCount();
       this._board.placePiece(capturedPiece, target);
       this.removeCapturedPiece(capturedPiece);
     }
