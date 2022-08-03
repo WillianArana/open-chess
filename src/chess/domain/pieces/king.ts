@@ -62,10 +62,11 @@ export class King extends ChessPiece {
     possibleMoves: boolean[][],
     createPosition: (row: number, column: number) => Position
   ): void {
-    const piecePosition = this.position as Position;
-    const position = createPosition(piecePosition.row, piecePosition.column);
-    if (this.canMove(position)) {
-      possibleMoves[position.row][position.column] = true;
+    if (this.position) {
+      const position = createPosition(this.position.row, this.position.column);
+      if (this.canMove(position)) {
+        possibleMoves[position.row][position.column] = true;
+      }
     }
   }
 
