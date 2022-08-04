@@ -9,6 +9,7 @@ import { ChessPosition, Column, Row } from './chess-position';
 import { ChessError } from './chess.error';
 import { Color } from './color';
 import { King } from './pieces/king';
+import { Pawn } from './pieces/pawn';
 import { Rook } from './pieces/rook';
 import ROWS_AMOUNT from './rows-amount';
 
@@ -72,21 +73,31 @@ export class ChessMatch {
     const board = this._board;
 
     //#region WHITE PIECES
+    this.placeNewPiece('a', 1, new Rook(board, Color.White));
     this.placeNewPiece('e', 1, new King(board, Color.White));
-    this.placeNewPiece('e', 2, new Rook(board, Color.White));
-    this.placeNewPiece('d', 2, new Rook(board, Color.White));
-    this.placeNewPiece('f', 2, new Rook(board, Color.White));
-    this.placeNewPiece('d', 1, new Rook(board, Color.White));
-    this.placeNewPiece('f', 1, new Rook(board, Color.White));
+    this.placeNewPiece('h', 1, new Rook(board, Color.White));
+    this.placeNewPiece('a', 2, new Pawn(board, Color.White));
+    this.placeNewPiece('b', 2, new Pawn(board, Color.White));
+    this.placeNewPiece('c', 2, new Pawn(board, Color.White));
+    this.placeNewPiece('d', 2, new Pawn(board, Color.White));
+    this.placeNewPiece('e', 2, new Pawn(board, Color.White));
+    this.placeNewPiece('f', 2, new Pawn(board, Color.White));
+    this.placeNewPiece('g', 2, new Pawn(board, Color.White));
+    this.placeNewPiece('h', 2, new Pawn(board, Color.White));
     //#endregion
 
     //#region BLACK PIECES
+    this.placeNewPiece('a', 8, new Rook(board, Color.Black));
     this.placeNewPiece('e', 8, new King(board, Color.Black));
-    this.placeNewPiece('d', 8, new Rook(board, Color.Black));
-    this.placeNewPiece('f', 8, new Rook(board, Color.Black));
-    this.placeNewPiece('d', 7, new Rook(board, Color.Black));
-    this.placeNewPiece('e', 7, new Rook(board, Color.Black));
-    this.placeNewPiece('f', 7, new Rook(board, Color.Black));
+    this.placeNewPiece('h', 8, new Rook(board, Color.Black));
+    this.placeNewPiece('a', 7, new Pawn(board, Color.Black));
+    this.placeNewPiece('b', 7, new Pawn(board, Color.Black));
+    this.placeNewPiece('c', 7, new Pawn(board, Color.Black));
+    this.placeNewPiece('d', 7, new Pawn(board, Color.Black));
+    this.placeNewPiece('e', 7, new Pawn(board, Color.Black));
+    this.placeNewPiece('f', 7, new Pawn(board, Color.Black));
+    this.placeNewPiece('g', 7, new Pawn(board, Color.Black));
+    this.placeNewPiece('h', 7, new Pawn(board, Color.Black));
     //#endregion
   }
 

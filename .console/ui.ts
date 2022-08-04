@@ -80,7 +80,7 @@ export class UI {
     if (piece) {
       row += piece.isWhite ? `${UI.COLOR_PIECE_WHITE}${piece}` : `${UI.COLOR_PIECE_BLACK}${piece}`;
     } else {
-      row += '–';
+      row += '-';
     }
     row += `${UI.ANSI_RESET} `;
     return row;

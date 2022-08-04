@@ -23,6 +23,10 @@ export abstract class ChessPiece extends Piece {
     return ChessPosition.fromPosition(piecePosition);
   }
 
+  protected get moveCount(): number {
+    return this._moveCount;
+  }
+
   public increaseMoveCount(): void {
     this._moveCount++;
   }
@@ -58,6 +62,6 @@ export abstract class ChessPiece extends Piece {
 
   private isThereOpponentPiece(position: Position): boolean {
     const piece = this.board.piece(position) as ChessPiece | null;
-    return piece?.color !== this.color;
+    return !!piece && piece.color !== this.color;
   }
 }

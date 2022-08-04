@@ -16,13 +16,13 @@ describe('King', () => {
 
   describe('toString', () => {
     it('should get white piece', () => {
-      const king = new King(new Board(8, 8), Color.White);
-      expect(king.toString()).toBe('♔');
+      const piece = new King(new Board(8, 8), Color.White);
+      expect(piece.toString()).toBe('♔');
     });
 
     it('should get black piece', () => {
-      const king = new King(new Board(8, 8), Color.Black);
-      expect(king.toString()).toBe('♚');
+      const piece = new King(new Board(8, 8), Color.Black);
+      expect(piece.toString()).toBe('♚');
     });
   });
 
