@@ -10,7 +10,7 @@ describe('Rook', () => {
     expect(new Rook(new Board(1, 1), Color.White)).toBeDefined();
   });
 
-  it(`should be a "Rook"`, () => {
+  it(`should be a "ChessPiece"`, () => {
     expect(new Rook(new Board(1, 1), Color.White)).toBeInstanceOf(ChessPiece);
   });
 
@@ -30,7 +30,7 @@ describe('Rook', () => {
     it('should get possible moves with empty board', () => {
       const piece = new Rook(new Board(8, 8), Color.White);
       (piece as any).position = new Position(3, 3);
-      const rookPossibleMoves = (i: number, j: number) =>
+      const pieceMoves = (i: number, j: number) =>
         (i === 0 && j === 3) ||
         (i === 1 && j === 3) ||
         (i === 2 && j === 3) ||
@@ -49,11 +49,7 @@ describe('Rook', () => {
       const possibleMoves = piece.possibleMoves();
       for (let i = 0; i < possibleMoves.length; i++) {
         for (let j = 0; j < possibleMoves.length; j++) {
-          if (rookPossibleMoves(i, j)) {
-            expect(possibleMoves[i][j]).toBeTruthy();
-          } else {
-            expect(possibleMoves[i][j]).toBeFalsy();
-          }
+          expect(possibleMoves[i][j]).toBe(pieceMoves(i, j));
         }
       }
     });
@@ -65,7 +61,7 @@ describe('Rook', () => {
       board.placePiece(new Rook(board, Color.White), new Position(7, 7));
       board.placePiece(new Rook(board, Color.Black), new Position(0, 0));
       board.placePiece(new Rook(board, Color.Black), new Position(0, 7));
-      const rookPossibleMoves = (i: number, j: number) =>
+      const pieceMoves = (i: number, j: number) =>
         (i === 0 && j === 0) ||
         (i === 1 && j === 0) ||
         (i === 2 && j === 0) ||
@@ -83,11 +79,7 @@ describe('Rook', () => {
       const possibleMoves = piece.possibleMoves();
       for (let i = 0; i < possibleMoves.length; i++) {
         for (let j = 0; j < possibleMoves.length; j++) {
-          if (rookPossibleMoves(i, j)) {
-            expect(possibleMoves[i][j]).toBeTruthy();
-          } else {
-            expect(possibleMoves[i][j]).toBeFalsy();
-          }
+          expect(possibleMoves[i][j]).toBe(pieceMoves(i, j));
         }
       }
     });
@@ -96,11 +88,16 @@ describe('Rook', () => {
       const board = new Board(8, 8);
       const piece = new Rook(board, Color.White);
       board.placePiece(piece, new Position(3, 3));
+      board.placePiece(new Rook(board, Color.Black), new Position(2, 2));
+      board.placePiece(new Rook(board, Color.Black), new Position(2, 3));
+      board.placePiece(new Rook(board, Color.Black), new Position(2, 4));
       board.placePiece(new Rook(board, Color.Black), new Position(3, 2));
       board.placePiece(new Rook(board, Color.Black), new Position(3, 4));
-      board.placePiece(new Rook(board, Color.Black), new Position(2, 3));
+      board.placePiece(new Rook(board, Color.Black), new Position(4, 2));
       board.placePiece(new Rook(board, Color.Black), new Position(4, 3));
-      const rookPossibleMoves = (i: number, j: number) =>
+      board.placePiece(new Rook(board, Color.Black), new Position(4, 4));
+
+      const pieceMoves = (i: number, j: number) =>
         (i === 2 && j === 3) ||
         (i === 4 && j === 3) ||
         (i === 3 && j === 2) ||
@@ -109,11 +106,7 @@ describe('Rook', () => {
       const possibleMoves = piece.possibleMoves();
       for (let i = 0; i < possibleMoves.length; i++) {
         for (let j = 0; j < possibleMoves.length; j++) {
-          if (rookPossibleMoves(i, j)) {
-            expect(possibleMoves[i][j]).toBeTruthy();
-          } else {
-            expect(possibleMoves[i][j]).toBeFalsy();
-          }
+          expect(possibleMoves[i][j]).toBe(pieceMoves(i, j));
         }
       }
     });

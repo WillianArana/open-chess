@@ -30,17 +30,12 @@ describe('Pawn', () => {
     it('should get possible moves with empty board (WHITE)', () => {
       const piece = new Pawn(new Board(8, 8), Color.White);
       (piece as any).position = new Position(3, 3);
-      const pawnPossibleMoves = (i: number, j: number) =>
-        (i === 2 && j === 3) || (i === 1 && j === 3);
+      const pieceMoves = (i: number, j: number) => (i === 2 && j === 3) || (i === 1 && j === 3);
 
       const possibleMoves = piece.possibleMoves();
       for (let i = 0; i < possibleMoves.length; i++) {
         for (let j = 0; j < possibleMoves.length; j++) {
-          if (pawnPossibleMoves(i, j)) {
-            expect(possibleMoves[i][j]).toBeTruthy();
-          } else {
-            expect(possibleMoves[i][j]).toBeFalsy();
-          }
+          expect(possibleMoves[i][j]).toBe(pieceMoves(i, j));
         }
       }
     });
@@ -48,17 +43,12 @@ describe('Pawn', () => {
     it('should get possible moves with empty board (BLACK)', () => {
       const piece = new Pawn(new Board(8, 8), Color.Black);
       (piece as any).position = new Position(3, 3);
-      const pawnPossibleMoves = (i: number, j: number) =>
-        (i === 4 && j === 3) || (i === 5 && j === 3);
+      const pieceMoves = (i: number, j: number) => (i === 4 && j === 3) || (i === 5 && j === 3);
 
       const possibleMoves = piece.possibleMoves();
       for (let i = 0; i < possibleMoves.length; i++) {
         for (let j = 0; j < possibleMoves.length; j++) {
-          if (pawnPossibleMoves(i, j)) {
-            expect(possibleMoves[i][j]).toBeTruthy();
-          } else {
-            expect(possibleMoves[i][j]).toBeFalsy();
-          }
+          expect(possibleMoves[i][j]).toBe(pieceMoves(i, j));
         }
       }
     });
@@ -67,39 +57,21 @@ describe('Pawn', () => {
       const board = new Board(8, 8);
       const piece = new Pawn(board, Color.White);
       board.placePiece(piece, new Position(3, 3));
+      board.placePiece(new Pawn(board, Color.Black), new Position(2, 2));
+      board.placePiece(new Pawn(board, Color.Black), new Position(2, 3));
+      board.placePiece(new Pawn(board, Color.Black), new Position(2, 4));
       board.placePiece(new Pawn(board, Color.Black), new Position(3, 2));
       board.placePiece(new Pawn(board, Color.Black), new Position(3, 4));
-      board.placePiece(new Pawn(board, Color.Black), new Position(2, 3));
+      board.placePiece(new Pawn(board, Color.Black), new Position(4, 2));
       board.placePiece(new Pawn(board, Color.Black), new Position(4, 3));
+      board.placePiece(new Pawn(board, Color.Black), new Position(4, 4));
+
+      const pieceMoves = (i: number, j: number) => (i === 2 && j === 2) || (i === 2 && j === 4);
 
       const possibleMoves = piece.possibleMoves();
       for (let i = 0; i < possibleMoves.length; i++) {
         for (let j = 0; j < possibleMoves.length; j++) {
-          expect(possibleMoves[i][j]).toBeFalsy();
-        }
-      }
-    });
-
-    it('should get possible moves with opponents above', () => {
-      const board = new Board(8, 8);
-      const piece = new Pawn(board, Color.White);
-      board.placePiece(piece, new Position(3, 3));
-      board.placePiece(new Pawn(board, Color.Black), new Position(2, 3));
-      board.placePiece(new Pawn(board, Color.Black), new Position(2, 2));
-      board.placePiece(new Pawn(board, Color.Black), new Position(2, 4));
-
-      const pawnPossibleMoves = (i: number, j: number) =>
-        (i === 2 && j === 2) || (i === 2 && j === 4);
-
-      const possibleMoves = piece.possibleMoves();
-      console.dir(pawnPossibleMoves);
-      for (let i = 0; i < possibleMoves.length; i++) {
-        for (let j = 0; j < possibleMoves.length; j++) {
-          if (pawnPossibleMoves(i, j)) {
-            expect(possibleMoves[i][j]).toBeTruthy();
-          } else {
-            expect(possibleMoves[i][j]).toBeFalsy();
-          }
+          expect(possibleMoves[i][j]).toBe(pieceMoves(i, j));
         }
       }
     });

@@ -30,7 +30,7 @@ describe('King', () => {
     it('should get possible moves with empty board', () => {
       const piece = new King(new Board(8, 8), Color.White);
       (piece as any).position = new Position(3, 3);
-      const kingPossibleMoves = (i: number, j: number) =>
+      const pieceMoves = (i: number, j: number) =>
         (i === 2 && j === 2) ||
         (i === 2 && j === 3) ||
         (i === 2 && j === 4) ||
@@ -43,11 +43,7 @@ describe('King', () => {
       const possibleMoves = piece.possibleMoves();
       for (let i = 0; i < possibleMoves.length; i++) {
         for (let j = 0; j < possibleMoves.length; j++) {
-          if (kingPossibleMoves(i, j)) {
-            expect(possibleMoves[i][j]).toBeTruthy();
-          } else {
-            expect(possibleMoves[i][j]).toBeFalsy();
-          }
+          expect(possibleMoves[i][j]).toBe(pieceMoves(i, j));
         }
       }
     });
@@ -57,7 +53,7 @@ describe('King', () => {
       const piece = new King(board, Color.White);
       board.placePiece(piece, new Position(7, 4));
       board.placePiece(new King(board, Color.Black), new Position(0, 4));
-      const kingPossibleMoves = (i: number, j: number) =>
+      const pieceMoves = (i: number, j: number) =>
         (i === 6 && j === 3) ||
         (i === 6 && j === 4) ||
         (i === 6 && j === 5) ||
@@ -67,11 +63,7 @@ describe('King', () => {
       const possibleMoves = piece.possibleMoves();
       for (let i = 0; i < possibleMoves.length; i++) {
         for (let j = 0; j < possibleMoves.length; j++) {
-          if (kingPossibleMoves(i, j)) {
-            expect(possibleMoves[i][j]).toBeTruthy();
-          } else {
-            expect(possibleMoves[i][j]).toBeFalsy();
-          }
+          expect(possibleMoves[i][j]).toBe(pieceMoves(i, j));
         }
       }
     });
@@ -80,12 +72,16 @@ describe('King', () => {
       const board = new Board(8, 8);
       const piece = new King(board, Color.White);
       board.placePiece(piece, new Position(3, 3));
+      board.placePiece(new King(board, Color.Black), new Position(2, 2));
+      board.placePiece(new King(board, Color.Black), new Position(2, 3));
+      board.placePiece(new King(board, Color.Black), new Position(2, 4));
       board.placePiece(new King(board, Color.Black), new Position(3, 2));
       board.placePiece(new King(board, Color.Black), new Position(3, 4));
-      board.placePiece(new King(board, Color.Black), new Position(2, 3));
+      board.placePiece(new King(board, Color.Black), new Position(4, 2));
       board.placePiece(new King(board, Color.Black), new Position(4, 3));
+      board.placePiece(new King(board, Color.Black), new Position(4, 4));
 
-      const kingPossibleMoves = (i: number, j: number) =>
+      const pieceMoves = (i: number, j: number) =>
         (i === 2 && j === 2) ||
         (i === 2 && j === 3) ||
         (i === 2 && j === 4) ||
@@ -98,11 +94,7 @@ describe('King', () => {
       const possibleMoves = piece.possibleMoves();
       for (let i = 0; i < possibleMoves.length; i++) {
         for (let j = 0; j < possibleMoves.length; j++) {
-          if (kingPossibleMoves(i, j)) {
-            expect(possibleMoves[i][j]).toBeTruthy();
-          } else {
-            expect(possibleMoves[i][j]).toBeFalsy();
-          }
+          expect(possibleMoves[i][j]).toBe(pieceMoves(i, j));
         }
       }
     });
