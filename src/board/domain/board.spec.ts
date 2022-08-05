@@ -4,7 +4,7 @@ import { Board } from './board';
 import { Position } from './position';
 
 describe('Board', () => {
-  it('should be create board', () => {
+  it('should be create', () => {
     expect(new Board(1, 1)).toBeDefined();
   });
 

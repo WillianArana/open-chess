@@ -3,7 +3,7 @@ import { Position } from '@src/board/domain/position';
 import { ChessPosition, Column, Row } from './chess-position';
 
 describe('ChessPosition', () => {
-  it('should be create a chess position', () => {
+  it('should be create', () => {
     expect(new ChessPosition('a', 1)).toBeDefined();
   });
 

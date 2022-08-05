@@ -1,7 +1,7 @@
 import { Position } from './position';
 
 describe('Position', () => {
-  it('should be create position', () => {
+  it('should be create', () => {
     const row = 0;
     const column = 1;
     expect(new Position(row, column)).toBeDefined();

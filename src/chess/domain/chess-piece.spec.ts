@@ -12,7 +12,7 @@ class ChessPieceMock extends ChessPiece {
 }
 
 describe('ChessPiece', () => {
-  it('should be create a chess piece', () => {
+  it('should be create', () => {
     const board = {} as BoardInterface;
     expect(new ChessPieceMock(board, Color.Black)).toBeDefined();
   });

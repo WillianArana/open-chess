@@ -6,7 +6,13 @@ import { Color } from '../color';
 import { Rook } from './rook';
 
 describe('Rook', () => {
-  it(`should be a "Rook"`, () => {
+  let board!: Board;
+
+  beforeEach(() => {
+    board = new Board(8, 8);
+  });
+
+  it(`should be create`, () => {
     expect(new Rook(new Board(1, 1), Color.White)).toBeDefined();
   });
 
@@ -16,19 +22,19 @@ describe('Rook', () => {
 
   describe('toString', () => {
     it('should get white piece', () => {
-      const piece = new Rook(new Board(8, 8), Color.White);
+      const piece = new Rook(board, Color.White);
       expect(piece.toString()).toBe('♖');
     });
 
     it('should get black piece', () => {
-      const piece = new Rook(new Board(8, 8), Color.Black);
+      const piece = new Rook(board, Color.Black);
       expect(piece.toString()).toBe('♜');
     });
   });
 
   describe('possibleMoves', () => {
     it('should get possible moves with empty board', () => {
-      const piece = new Rook(new Board(8, 8), Color.White);
+      const piece = new Rook(board, Color.White);
       (piece as any).position = new Position(3, 3);
       const pieceMoves = (i: number, j: number) =>
         (i === 0 && j === 3) ||
@@ -55,7 +61,6 @@ describe('Rook', () => {
     });
 
     it('should get possible moves with all Rooks', () => {
-      const board = new Board(8, 8);
       const piece = new Rook(board, Color.White);
       board.placePiece(piece, new Position(7, 0));
       board.placePiece(new Rook(board, Color.White), new Position(7, 7));
@@ -85,7 +90,6 @@ describe('Rook', () => {
     });
 
     it('should get possible moves with opponents around', () => {
-      const board = new Board(8, 8);
       const piece = new Rook(board, Color.White);
       board.placePiece(piece, new Position(3, 3));
       board.placePiece(new Rook(board, Color.Black), new Position(2, 2));

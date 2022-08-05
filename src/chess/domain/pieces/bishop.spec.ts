@@ -6,7 +6,13 @@ import { Color } from '../color';
 import { Bishop } from './bishop';
 
 describe('Bishop', () => {
-  it(`should be a "Bishop"`, () => {
+  let board!: Board;
+
+  beforeEach(() => {
+    board = new Board(8, 8);
+  });
+
+  it(`should be create`, () => {
     expect(new Bishop(new Board(1, 1), Color.White)).toBeDefined();
   });
 
@@ -16,19 +22,19 @@ describe('Bishop', () => {
 
   describe('toString', () => {
     it('should get white piece', () => {
-      const piece = new Bishop(new Board(8, 8), Color.White);
+      const piece = new Bishop(board, Color.White);
       expect(piece.toString()).toBe('♗');
     });
 
     it('should get black piece', () => {
-      const piece = new Bishop(new Board(8, 8), Color.Black);
+      const piece = new Bishop(board, Color.Black);
       expect(piece.toString()).toBe('♝');
     });
   });
 
   describe('possibleMoves', () => {
     it('should get possible moves with empty board', () => {
-      const piece = new Bishop(new Board(8, 8), Color.White);
+      const piece = new Bishop(board, Color.White);
       (piece as any).position = new Position(3, 3);
       const pieceMoves = (i: number, j: number) =>
         (i === 0 && j === 0) ||
@@ -54,7 +60,6 @@ describe('Bishop', () => {
     });
 
     it('should get possible moves with opponents around', () => {
-      const board = new Board(8, 8);
       const piece = new Bishop(board, Color.White);
       board.placePiece(piece, new Position(3, 3));
       board.placePiece(new Bishop(board, Color.Black), new Position(2, 2));

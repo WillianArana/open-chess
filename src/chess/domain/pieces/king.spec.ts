@@ -6,7 +6,13 @@ import { Color } from '../color';
 import { King } from './king';
 
 describe('King', () => {
-  it(`should be a "King"`, () => {
+  let board!: Board;
+
+  beforeEach(() => {
+    board = new Board(8, 8);
+  });
+
+  it(`should be create king`, () => {
     expect(new King(new Board(1, 1), Color.White)).toBeDefined();
   });
 
@@ -16,19 +22,19 @@ describe('King', () => {
 
   describe('toString', () => {
     it('should get white piece', () => {
-      const piece = new King(new Board(8, 8), Color.White);
+      const piece = new King(board, Color.White);
       expect(piece.toString()).toBe('♔');
     });
 
     it('should get black piece', () => {
-      const piece = new King(new Board(8, 8), Color.Black);
+      const piece = new King(board, Color.Black);
       expect(piece.toString()).toBe('♚');
     });
   });
 
   describe('possibleMoves', () => {
     it('should get possible moves with empty board', () => {
-      const piece = new King(new Board(8, 8), Color.White);
+      const piece = new King(board, Color.White);
       (piece as any).position = new Position(3, 3);
       const pieceMoves = (i: number, j: number) =>
         (i === 2 && j === 2) ||
@@ -49,7 +55,6 @@ describe('King', () => {
     });
 
     it('should get possible moves with all Kings', () => {
-      const board = new Board(8, 8);
       const piece = new King(board, Color.White);
       board.placePiece(piece, new Position(7, 4));
       board.placePiece(new King(board, Color.Black), new Position(0, 4));
@@ -69,7 +74,6 @@ describe('King', () => {
     });
 
     it('should get possible moves with opponents around', () => {
-      const board = new Board(8, 8);
       const piece = new King(board, Color.White);
       board.placePiece(piece, new Position(3, 3));
       board.placePiece(new King(board, Color.Black), new Position(2, 2));

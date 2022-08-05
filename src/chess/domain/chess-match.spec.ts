@@ -5,7 +5,7 @@ import { King } from './pieces/king';
 import { Rook } from './pieces/rook';
 
 describe('ChessMatch', () => {
-  it('should be create "ChessMatch"', () => {
+  it('should be create', () => {
     expect(new ChessMatch()).toBeDefined();
   });
 
