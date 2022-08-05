@@ -68,7 +68,7 @@ export class UI {
     const getPieceInRow = (i: number, j: number, row: string) => {
       const isChangeBackground = possibleMoves[i][j];
       if (isChangeBackground) {
-        row += UI.ANSI_BLUE_BACKGROUND;
+        row += UI.ANSI_CYAN_BACKGROUND;
       }
       const piece = pieces[i][j] as ChessPiece | null;
       return UI.getPieceInRow(row, piece);
