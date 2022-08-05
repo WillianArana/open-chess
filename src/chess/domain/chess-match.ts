@@ -12,6 +12,7 @@ import { Bishop } from './pieces/bishop';
 import { King } from './pieces/king';
 import { Knight } from './pieces/knight';
 import { Pawn } from './pieces/pawn';
+import { Queen } from './pieces/queen';
 import { Rook } from './pieces/rook';
 import ROWS_AMOUNT from './rows-amount';
 
@@ -72,12 +73,16 @@ export class ChessMatch {
   }
 
   protected initialSetup(): void {
-    const board = this._board;
+    this.placeWhitePieces();
+    this.placeBlackPieces();
+  }
 
-    //#region WHITE PIECES
+  private placeWhitePieces(): void {
+    const board = this._board;
     this.placeNewPiece('a', 1, new Rook(board, Color.White));
     this.placeNewPiece('b', 1, new Knight(board, Color.White));
     this.placeNewPiece('c', 1, new Bishop(board, Color.White));
+    this.placeNewPiece('d', 1, new Queen(board, Color.White));
     this.placeNewPiece('e', 1, new King(board, Color.White));
     this.placeNewPiece('f', 1, new Bishop(board, Color.White));
     this.placeNewPiece('g', 1, new Knight(board, Color.White));
@@ -90,12 +95,14 @@ export class ChessMatch {
     this.placeNewPiece('f', 2, new Pawn(board, Color.White));
     this.placeNewPiece('g', 2, new Pawn(board, Color.White));
     this.placeNewPiece('h', 2, new Pawn(board, Color.White));
-    //#endregion
+  }
 
-    //#region BLACK PIECES
+  private placeBlackPieces(): void {
+    const board = this._board;
     this.placeNewPiece('a', 8, new Rook(board, Color.Black));
     this.placeNewPiece('b', 8, new Knight(board, Color.Black));
     this.placeNewPiece('c', 8, new Bishop(board, Color.Black));
+    this.placeNewPiece('d', 8, new Queen(board, Color.Black));
     this.placeNewPiece('e', 8, new King(board, Color.Black));
     this.placeNewPiece('f', 8, new Bishop(board, Color.Black));
     this.placeNewPiece('g', 8, new Knight(board, Color.Black));
@@ -108,7 +115,6 @@ export class ChessMatch {
     this.placeNewPiece('f', 7, new Pawn(board, Color.Black));
     this.placeNewPiece('g', 7, new Pawn(board, Color.Black));
     this.placeNewPiece('h', 7, new Pawn(board, Color.Black));
-    //#endregion
   }
 
   protected placeNewPiece(column: Column, row: Row, piece: ChessPiece): void {
