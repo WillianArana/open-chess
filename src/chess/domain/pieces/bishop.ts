@@ -6,29 +6,29 @@ export class Bishop extends ChessPiece {
   //@Override
   public possibleMoves(): boolean[][] {
     const possibleMoves = this.createMatrixPossibleMoves();
-    this.possibleNorthwestMove(possibleMoves);
-    this.possibleNortheastMove(possibleMoves);
-    this.possibleSouthwestMove(possibleMoves);
-    this.possibleSoutheastMove(possibleMoves);
+    this.possibleNorthwestMoves(possibleMoves);
+    this.possibleNortheastMoves(possibleMoves);
+    this.possibleSouthwestMoves(possibleMoves);
+    this.possibleSoutheastMoves(possibleMoves);
     return possibleMoves;
   }
 
-  private possibleNorthwestMove(possibleMoves: boolean[][]): void {
+  private possibleNorthwestMoves(possibleMoves: boolean[][]): void {
     const createPosition = (row: number, column: number) => new Position(row - 1, column - 1);
     this.setPossibleMoves(possibleMoves, createPosition);
   }
 
-  private possibleNortheastMove(possibleMoves: boolean[][]): void {
+  private possibleNortheastMoves(possibleMoves: boolean[][]): void {
     const createPosition = (row: number, column: number) => new Position(row - 1, column + 1);
     this.setPossibleMoves(possibleMoves, createPosition);
   }
 
-  private possibleSouthwestMove(possibleMoves: boolean[][]): void {
+  private possibleSouthwestMoves(possibleMoves: boolean[][]): void {
     const createPosition = (row: number, column: number) => new Position(row + 1, column + 1);
     this.setPossibleMoves(possibleMoves, createPosition);
   }
 
-  private possibleSoutheastMove(possibleMoves: boolean[][]): void {
+  private possibleSoutheastMoves(possibleMoves: boolean[][]): void {
     const createPosition = (row: number, column: number) => new Position(row + 1, column - 1);
     this.setPossibleMoves(possibleMoves, createPosition);
   }
