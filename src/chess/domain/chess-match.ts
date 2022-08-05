@@ -8,6 +8,7 @@ import { ChessPiece } from './chess-piece';
 import { ChessPosition, Column, Row } from './chess-position';
 import { ChessError } from './chess.error';
 import { Color } from './color';
+import { Bishop } from './pieces/bishop';
 import { King } from './pieces/king';
 import { Pawn } from './pieces/pawn';
 import { Rook } from './pieces/rook';
@@ -74,7 +75,9 @@ export class ChessMatch {
 
     //#region WHITE PIECES
     this.placeNewPiece('a', 1, new Rook(board, Color.White));
+    this.placeNewPiece('c', 1, new Bishop(board, Color.White));
     this.placeNewPiece('e', 1, new King(board, Color.White));
+    this.placeNewPiece('f', 1, new Bishop(board, Color.White));
     this.placeNewPiece('h', 1, new Rook(board, Color.White));
     this.placeNewPiece('a', 2, new Pawn(board, Color.White));
     this.placeNewPiece('b', 2, new Pawn(board, Color.White));
@@ -88,7 +91,9 @@ export class ChessMatch {
 
     //#region BLACK PIECES
     this.placeNewPiece('a', 8, new Rook(board, Color.Black));
+    this.placeNewPiece('c', 8, new Bishop(board, Color.Black));
     this.placeNewPiece('e', 8, new King(board, Color.Black));
+    this.placeNewPiece('f', 8, new Bishop(board, Color.Black));
     this.placeNewPiece('h', 8, new Rook(board, Color.Black));
     this.placeNewPiece('a', 7, new Pawn(board, Color.Black));
     this.placeNewPiece('b', 7, new Pawn(board, Color.Black));
