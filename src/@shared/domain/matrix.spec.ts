@@ -2,7 +2,11 @@ import { Matrix } from './matrix';
 
 describe('Matrix', () => {
   it('should be create', () => {
-    expect(new Matrix(0, 0)).toBeDefined();
+    expect(new Matrix(1, 1)).toBeDefined();
+  });
+
+  it('should throw error when create', () => {
+    expect(() => new Matrix(1, 0)).toThrowError('There must be at least 1 row and 1 column');
   });
 
   describe('iterator', () => {

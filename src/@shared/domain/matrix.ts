@@ -10,6 +10,9 @@ export class Matrix<T = unknown> {
     public readonly columns: number,
     startValue = null as unknown as T
   ) {
+    if (rows < 1 || columns < 1) {
+      throw new Error('There must be at least 1 row and 1 column');
+    }
     const items = this.buildItems(startValue);
     this._iterator = new MatrixIterator(items, startValue, rows, columns);
     this._items = items;

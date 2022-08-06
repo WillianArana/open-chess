@@ -8,12 +8,6 @@ describe('Board', () => {
     expect(new Board(1, 1)).toBeDefined();
   });
 
-  it('should throw error Board when create board', () => {
-    expect(() => new Board(1, 0)).toThrowError(
-      'Error creating board: there must be at least 1 row and 1 column'
-    );
-  });
-
   it('should get rows', () => {
     const board = new Board(2, 2);
     expect(board.rows).toBe(2);

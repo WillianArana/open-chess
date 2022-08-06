@@ -11,9 +11,6 @@ export class Board implements BoardInterface {
   private readonly _pieces: Matrix<Piece | null>;
 
   constructor(public readonly rows: number, public readonly columns: number) {
-    if (rows < 1 || columns < 1) {
-      throw new BoardError('Error creating board: there must be at least 1 row and 1 column');
-    }
     this._pieces = new Matrix<Piece>(rows, columns);
   }
 
