@@ -1,23 +1,21 @@
 import { Board } from '../../board/domain/board';
-import createMatrix from './helpers/create-matrix';
+import { Matrix } from './matrix/matrix';
 import { Piece } from './piece';
 
 class PieceMock extends Piece {
-  public possibleMoves(): boolean[][] {
+  public possibleMoves(): Matrix<boolean> {
     return this.createMatrixPossibleMoves();
   }
 }
 
 class FoolPieceMock extends PieceMock {
-  protected createMatrixPossibleMoves(): boolean[][] {
-    const { rows, columns } = this.board;
-    return createMatrix<boolean>(rows)(columns, true);
+  protected createMatrixPossibleMoves(): Matrix<boolean> {
+    return new Matrix<boolean>(this.board.rows, this.board.columns, true);
   }
 }
 
-const entity = Piece.name;
-describe(entity, () => {
-  it('should be create piece', () => {
+describe('Piece', () => {
+  it('should be create', () => {
     const board = new Board(2, 2);
     const piece = new PieceMock(board);
     expect(piece).toBeDefined();

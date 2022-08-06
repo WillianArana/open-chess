@@ -1,6 +1,6 @@
 import { Position } from '../../board/domain/position';
-import createMatrix from './helpers/create-matrix';
 import { BoardInterface } from './interfaces/board.interface';
+import { Matrix } from './matrix/matrix';
 
 export abstract class Piece {
   protected position: Position | null;
@@ -8,24 +8,20 @@ export abstract class Piece {
     this.position = null;
   }
 
-  public abstract possibleMoves(): boolean[][];
+  public abstract possibleMoves(): Matrix<boolean>;
 
   public possibleMove(position: Position): boolean {
-    return this.possibleMoves()[position.row][position.column];
+    return this.possibleMoves().get(position);
   }
 
   public isThereAnyPossibleMove(): boolean {
-    const possibleMoves = this.possibleMoves();
-    for (let i = 0; i < possibleMoves.length; i++) {
-      for (let j = 0; j < possibleMoves.length; j++) {
-        if (possibleMoves[i][j]) return true;
-      }
+    for (const isPossibleMove of this.possibleMoves()) {
+      if (isPossibleMove) return true;
     }
     return false;
   }
 
-  protected createMatrixPossibleMoves(): boolean[][] {
-    const { rows, columns } = this.board;
-    return createMatrix<boolean>(rows)(columns, false);
+  protected createMatrixPossibleMoves(): Matrix<boolean> {
+    return new Matrix<boolean>(this.board.rows, this.board.columns, false);
   }
 }
