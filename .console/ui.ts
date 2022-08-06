@@ -3,7 +3,7 @@ import { info, clear } from 'console';
 import { ChessPiece } from '../src/chess/domain/chess-piece';
 import { ChessMatch } from '../src/chess/domain/chess-match';
 import { Color } from '../src/chess/domain/color';
-import { Matrix } from '../src/@shared/domain/matrix/matrix';
+import { Matrix } from '../src/@shared/domain/matrix';
 
 export class UI {
   public static readonly ANSI_RESET = '\u001B[0m';

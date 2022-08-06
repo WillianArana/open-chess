@@ -1,6 +1,6 @@
 import { Position } from '@src/board/domain/position';
 
-import { Matrix } from '@shared/domain/matrix/matrix';
+import { Matrix } from '@shared/domain/matrix';
 
 import { ChessPiece } from '../chess-piece';
 

@@ -21,6 +21,7 @@ describe('Matrix', () => {
     it('should get item', () => {
       const matrix = new Matrix<boolean>(2, 2, true);
       expect(matrix.get({ row: 0, column: 0 })).toBeTruthy();
+      expect(matrix.position).toEqual({ row: 0, column: 0 });
     });
   });
 
@@ -29,6 +30,7 @@ describe('Matrix', () => {
       const matrix = new Matrix<number>(2, 2);
       matrix.set(42, { row: 1, column: 0 });
 
+      expect(matrix.position).toEqual({ row: 0, column: 0 });
       expect(matrix.get({ row: 0, column: 0 })).toBeNull();
       expect(matrix.get({ row: 0, column: 1 })).toBeNull();
       expect(matrix.get({ row: 1, column: 1 })).toBeNull();

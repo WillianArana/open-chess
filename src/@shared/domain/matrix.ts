@@ -1,6 +1,6 @@
-import { PositionInterface } from '../interfaces/position.interface';
+import { MatrixIteratorInterface } from './interfaces/matrix.iterator.interface';
+import { PositionInterface } from './interfaces/position.interface';
 import { MatrixIterator } from './matrix.iterator';
-import { MatrixIteratorInterface } from './matrix.iterator.interface';
 
 export class Matrix<T = unknown> {
   private readonly _items: T[][];
@@ -13,6 +13,10 @@ export class Matrix<T = unknown> {
     const items = this.buildItems(startValue);
     this._iterator = new MatrixIterator(items, startValue, rows, columns);
     this._items = items;
+  }
+
+  get position(): PositionInterface {
+    return this._iterator.position();
   }
 
   private buildItems(startValue: T): T[][] {

@@ -1,5 +1,5 @@
 import { Board } from '../../board/domain/board';
-import { Matrix } from './matrix/matrix';
+import { Matrix } from './matrix';
 import { Piece } from './piece';
 
 class PieceMock extends Piece {

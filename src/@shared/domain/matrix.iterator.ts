@@ -1,4 +1,5 @@
-import { MatrixIteratorInterface } from './matrix.iterator.interface';
+import { MatrixIteratorInterface } from './interfaces/matrix.iterator.interface';
+import { PositionInterface } from './interfaces/position.interface';
 
 export class MatrixIterator<T = unknown> implements MatrixIteratorInterface<T> {
   private _row = 0;
@@ -50,5 +51,12 @@ export class MatrixIterator<T = unknown> implements MatrixIteratorInterface<T> {
 
   private isDone(): boolean {
     return this._row == this._rowLimit && this._column + 1 == this._columnLimit;
+  }
+
+  public position(): PositionInterface {
+    return {
+      row: this._row,
+      column: Math.max(0, this._column),
+    };
   }
 }

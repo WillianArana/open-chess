@@ -1,6 +1,6 @@
 import { Position } from '../../board/domain/position';
 import { BoardInterface } from './interfaces/board.interface';
-import { Matrix } from './matrix/matrix';
+import { Matrix } from './matrix';
 
 export abstract class Piece {
   protected position: Position | null;

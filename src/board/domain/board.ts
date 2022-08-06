@@ -1,5 +1,5 @@
 import { PositionInterface } from '@shared/domain/interfaces/position.interface';
-import { Matrix } from '@shared/domain/matrix/matrix';
+import { Matrix } from '@shared/domain/matrix';
 import { Piece } from '@shared/domain/piece';
 
 import { BoardInterface } from '../../@shared/domain/interfaces/board.interface';

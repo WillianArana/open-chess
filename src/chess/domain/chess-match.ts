@@ -1,7 +1,7 @@
 import { Board } from '@src/board/domain/board';
 import { Position } from '@src/board/domain/position';
 
-import { Matrix } from '@shared/domain/matrix/matrix';
+import { Matrix } from '@shared/domain/matrix';
 import { Piece } from '@shared/domain/piece';
 
 import { ChessPiece } from './chess-piece';
@@ -79,14 +79,10 @@ export class ChessMatch {
     this.placeNewPiece('f', 1, new Bishop(board, Color.White));
     this.placeNewPiece('g', 1, new Knight(board, Color.White));
     this.placeNewPiece('h', 1, new Rook(board, Color.White));
-    this.placeNewPiece('a', 2, new Pawn(board, Color.White));
-    this.placeNewPiece('b', 2, new Pawn(board, Color.White));
-    this.placeNewPiece('c', 2, new Pawn(board, Color.White));
-    this.placeNewPiece('d', 2, new Pawn(board, Color.White));
-    this.placeNewPiece('e', 2, new Pawn(board, Color.White));
-    this.placeNewPiece('f', 2, new Pawn(board, Color.White));
-    this.placeNewPiece('g', 2, new Pawn(board, Color.White));
-    this.placeNewPiece('h', 2, new Pawn(board, Color.White));
+
+    for (const column of 'abcdefgh') {
+      this.placeNewPiece(column as Column, 2, new Pawn(board, Color.White));
+    }
   }
 
   private placeBlackPieces(): void {
@@ -99,14 +95,10 @@ export class ChessMatch {
     this.placeNewPiece('f', 8, new Bishop(board, Color.Black));
     this.placeNewPiece('g', 8, new Knight(board, Color.Black));
     this.placeNewPiece('h', 8, new Rook(board, Color.Black));
-    this.placeNewPiece('a', 7, new Pawn(board, Color.Black));
-    this.placeNewPiece('b', 7, new Pawn(board, Color.Black));
-    this.placeNewPiece('c', 7, new Pawn(board, Color.Black));
-    this.placeNewPiece('d', 7, new Pawn(board, Color.Black));
-    this.placeNewPiece('e', 7, new Pawn(board, Color.Black));
-    this.placeNewPiece('f', 7, new Pawn(board, Color.Black));
-    this.placeNewPiece('g', 7, new Pawn(board, Color.Black));
-    this.placeNewPiece('h', 7, new Pawn(board, Color.Black));
+
+    for (const column of 'abcdefgh') {
+      this.placeNewPiece(column as Column, 7, new Pawn(board, Color.Black));
+    }
   }
 
   protected placeNewPiece(column: Column, row: Row, piece: ChessPiece): void {
@@ -138,13 +130,25 @@ export class ChessMatch {
   }
 
   private validateSourcePosition(position: Position): void {
+    this.validateThereIsAPiece(position);
+    this.validatePieceIsYours(position);
+    this.validateIsThereAnyPossibleMove(position);
+  }
+
+  private validateThereIsAPiece(position: Position): void {
     if (!this._board.thereIsAPiece(position)) {
       throw new ChessError('There is no piece on source position');
     }
+  }
+
+  private validatePieceIsYours(position: Position): void {
     const piece = this._board.piece(position) as ChessPiece;
     if (this._currentPlayer !== piece.color) {
       throw new ChessError('The chosen piece is not yours');
     }
+  }
+
+  private validateIsThereAnyPossibleMove(position: Position): void {
     if (!this._board.piece(position)?.isThereAnyPossibleMove()) {
       throw new ChessError('There is no possible moves for the chosen piece');
     }
@@ -238,13 +242,11 @@ export class ChessMatch {
 
   private tryPullOutCheckMate(color: Color, piece: ChessPiece): boolean {
     const possibleMoves = piece.possibleMoves();
-    for (let row = 0; row < this._board.rows; row++) {
-      for (let column = 0; column < this._board.columns; column++) {
-        if (possibleMoves.get({ row, column })) {
-          const target = new Position(row, column);
-          const isCheck = this.testMoveToPullOutCheckMate(color, piece, target);
-          if (!isCheck) return true;
-        }
+    for (const isPossibleMove of possibleMoves) {
+      if (isPossibleMove) {
+        const target = possibleMoves.position;
+        const isCheck = this.testMoveToPullOutCheckMate(color, piece, target);
+        if (!isCheck) return true;
       }
     }
     return false;
