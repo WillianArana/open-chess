@@ -53,9 +53,9 @@ describe('Rook', () => {
         (i === 3 && j === 7);
 
       const possibleMoves = piece.possibleMoves();
-      for (let i = 0; i < possibleMoves.length; i++) {
-        for (let j = 0; j < possibleMoves.length; j++) {
-          expect(possibleMoves[i][j]).toBe(pieceMoves(i, j));
+      for (let i = 0; i < possibleMoves.rows; i++) {
+        for (let j = 0; j < possibleMoves.columns; j++) {
+          expect(possibleMoves.get({ row: i, column: j })).toBe(pieceMoves(i, j));
         }
       }
     });
@@ -82,9 +82,9 @@ describe('Rook', () => {
         (i === 7 && j === 6);
 
       const possibleMoves = piece.possibleMoves();
-      for (let i = 0; i < possibleMoves.length; i++) {
-        for (let j = 0; j < possibleMoves.length; j++) {
-          expect(possibleMoves[i][j]).toBe(pieceMoves(i, j));
+      for (let i = 0; i < possibleMoves.rows; i++) {
+        for (let j = 0; j < possibleMoves.columns; j++) {
+          expect(possibleMoves.get({ row: i, column: j })).toBe(pieceMoves(i, j));
         }
       }
     });
@@ -108,9 +108,9 @@ describe('Rook', () => {
         (i === 3 && j === 4);
 
       const possibleMoves = piece.possibleMoves();
-      for (let i = 0; i < possibleMoves.length; i++) {
-        for (let j = 0; j < possibleMoves.length; j++) {
-          expect(possibleMoves[i][j]).toBe(pieceMoves(i, j));
+      for (let i = 0; i < possibleMoves.rows; i++) {
+        for (let j = 0; j < possibleMoves.columns; j++) {
+          expect(possibleMoves.get({ row: i, column: j })).toBe(pieceMoves(i, j));
         }
       }
     });
