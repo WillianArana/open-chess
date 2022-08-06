@@ -5,8 +5,7 @@ import { Piece } from '@shared/domain/piece';
 import { BoardInterface } from '../../@shared/domain/interfaces/board.interface';
 import { BoardError } from './board.error';
 
-type PositionType = PositionInterface | { row: number; column: number };
-type PieceType = Piece & { position: PositionType | null };
+type PieceType = Piece & { position: PositionInterface | null };
 
 export class Board implements BoardInterface {
   private readonly _pieces: Matrix<Piece | null>;
@@ -22,18 +21,18 @@ export class Board implements BoardInterface {
     return this._pieces;
   }
 
-  public piece(position: PositionType): Piece | null {
+  public piece(position: PositionInterface): Piece | null {
     this.positionValidate(position);
     return this._pieces.get(position);
   }
 
-  private positionValidate(position: PositionType): void {
+  private positionValidate(position: PositionInterface): void {
     if (!position || !this.positionExists(position)) {
       throw new BoardError('Position not on the board');
     }
   }
 
-  public positionExists(position: PositionType): boolean {
+  public positionExists(position: PositionInterface): boolean {
     const { row, column } = position;
     return row >= 0 && row < this.rows && column >= 0 && column < this.columns;
   }
@@ -44,18 +43,18 @@ export class Board implements BoardInterface {
     (piece as PieceType).position = position;
   }
 
-  private placePieceValidate(position: PositionType): void {
+  private placePieceValidate(position: PositionInterface): void {
     if (this.thereIsAPiece(position)) {
       throw new BoardError(`There is already a piece on position ${position}`);
     }
   }
 
-  public thereIsAPiece(position: PositionType): boolean {
+  public thereIsAPiece(position: PositionInterface): boolean {
     this.positionValidate(position);
     return !!this.piece(position);
   }
 
-  public removePiece(position: PositionType): Piece | null {
+  public removePiece(position: PositionInterface): Piece | null {
     this.positionValidate(position);
     const piece = this.piece(position);
     if (piece) {
