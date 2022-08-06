@@ -16,15 +16,15 @@ export class Matrix<T = unknown> {
   }
 
   private buildItems(startValue: T): T[][] {
-    const matrix: T[][] = [];
-    for (let x = 0; x < this.rows; x++) {
-      const row: T[] = [];
-      for (let y = 0; y < this.columns; y++) {
-        row.push(startValue);
+    const items: T[][] = [];
+    for (let row = 0; row < this.rows; row++) {
+      const item: T[] = [];
+      for (let column = 0; column < this.columns; column++) {
+        item.push(startValue);
       }
-      matrix.push(row);
+      items.push(item);
     }
-    return matrix;
+    return items;
   }
 
   get(position: PositionInterface): T {
@@ -36,9 +36,9 @@ export class Matrix<T = unknown> {
   }
 
   fill(resource: Matrix<T>): void {
-    for (let i = 0; i < this.rows; i++) {
-      for (let j = 0; j < this.columns; j++) {
-        const position = { row: i, column: j };
+    for (let row = 0; row < this.rows; row++) {
+      for (let column = 0; column < this.columns; column++) {
+        const position = { row, column };
         this.set(resource.get(position), position);
       }
     }
