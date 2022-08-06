@@ -3,6 +3,7 @@ import { info, clear } from 'console';
 import { ChessPiece } from '../src/chess/domain/chess-piece';
 import { ChessMatch } from '../src/chess/domain/chess-match';
 import { Color } from '../src/chess/domain/color';
+import { Matrix } from '../src/@shared/domain/matrix/matrix';
 
 export class UI {
   public static readonly ANSI_RESET = '\u001B[0m';
@@ -38,22 +39,23 @@ export class UI {
     },
   };
 
-  public static printBoard(pieces: ChessPiece[][]): void {
+  public static printBoard(pieces: Matrix<ChessPiece>): void {
     const getPieceInRow = (i: number, j: number, row: string) => {
-      const piece = pieces[i][j] as ChessPiece | null;
+      const position = { row: i, column: j };
+      const piece = pieces.get(position) as ChessPiece | null;
       return UI.getPieceInRow(row, piece);
     };
     UI.printLayout(pieces, getPieceInRow);
   }
 
   private static printLayout(
-    pieces: ChessPiece[][],
+    pieces: Matrix<ChessPiece>,
     getPieceInRow: (i: number, j: number, row: string) => string
   ): void {
     info('\n');
-    for (let i = 0; i < pieces.length; i++) {
+    for (let i = 0; i < pieces.rows; i++) {
       let row = `${8 - i} `;
-      for (let j = 0; j < pieces.length; j++) {
+      for (let j = 0; j < pieces.columns; j++) {
         row = getPieceInRow(i, j, row);
       }
       info(row);
@@ -62,15 +64,16 @@ export class UI {
   }
 
   public static printBoardWithPossibleMoves(
-    pieces: ChessPiece[][],
-    possibleMoves: boolean[][]
+    pieces: Matrix<ChessPiece>,
+    possibleMoves: Matrix<boolean>
   ): void {
     const getPieceInRow = (i: number, j: number, row: string) => {
-      const isChangeBackground = possibleMoves[i][j];
+      const position = { row: i, column: j };
+      const isChangeBackground = possibleMoves.get(position);
       if (isChangeBackground) {
         row += UI.ANSI_CYAN_BACKGROUND;
       }
-      const piece = pieces[i][j] as ChessPiece | null;
+      const piece = pieces.get(position) as ChessPiece | null;
       return UI.getPieceInRow(row, piece);
     };
     UI.printLayout(pieces, getPieceInRow);
