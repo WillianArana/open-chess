@@ -1,10 +1,12 @@
 import { Position } from '@src/board/domain/position';
 
+import { Matrix } from '@shared/domain/matrix/matrix';
+
 import { ChessPiece } from '../chess-piece';
 
 export class King extends ChessPiece {
   //@Override
-  public possibleMoves(): boolean[][] {
+  public possibleMoves(): Matrix<boolean> {
     const possibleMoves = this.createMatrixPossibleMoves();
     this.possibleAboveMove(possibleMoves);
     this.possibleBelowMove(possibleMoves);
@@ -17,55 +19,55 @@ export class King extends ChessPiece {
     return possibleMoves;
   }
 
-  private possibleAboveMove(possibleMoves: boolean[][]): void {
+  private possibleAboveMove(possibleMoves: Matrix<boolean>): void {
     const createPosition = (row: number, column: number) => new Position(row - 1, column);
     this.setPossibleMoves(possibleMoves, createPosition);
   }
 
-  private possibleBelowMove(possibleMoves: boolean[][]): void {
+  private possibleBelowMove(possibleMoves: Matrix<boolean>): void {
     const createPosition = (row: number, column: number) => new Position(row + 1, column);
     this.setPossibleMoves(possibleMoves, createPosition);
   }
 
-  private possibleLeftMove(possibleMoves: boolean[][]): void {
+  private possibleLeftMove(possibleMoves: Matrix<boolean>): void {
     const createPosition = (row: number, column: number) => new Position(row, column - 1);
     this.setPossibleMoves(possibleMoves, createPosition);
   }
 
-  private possibleRightMove(possibleMoves: boolean[][]): void {
+  private possibleRightMove(possibleMoves: Matrix<boolean>): void {
     const createPosition = (row: number, column: number) => new Position(row, column + 1);
     this.setPossibleMoves(possibleMoves, createPosition);
   }
 
-  private possibleNorthwestMove(possibleMoves: boolean[][]): void {
+  private possibleNorthwestMove(possibleMoves: Matrix<boolean>): void {
     const createPosition = (row: number, column: number) => new Position(row - 1, column - 1);
     this.setPossibleMoves(possibleMoves, createPosition);
   }
 
-  private possibleNortheastMove(possibleMoves: boolean[][]): void {
+  private possibleNortheastMove(possibleMoves: Matrix<boolean>): void {
     const createPosition = (row: number, column: number) => new Position(row - 1, column + 1);
     this.setPossibleMoves(possibleMoves, createPosition);
   }
 
-  private possibleSouthwestMove(possibleMoves: boolean[][]): void {
+  private possibleSouthwestMove(possibleMoves: Matrix<boolean>): void {
     const createPosition = (row: number, column: number) => new Position(row + 1, column - 1);
     this.setPossibleMoves(possibleMoves, createPosition);
   }
 
-  private possibleSoutheastMove(possibleMoves: boolean[][]): void {
+  private possibleSoutheastMove(possibleMoves: Matrix<boolean>): void {
     const createPosition = (row: number, column: number) => new Position(row + 1, column + 1);
     this.setPossibleMoves(possibleMoves, createPosition);
   }
 
   //@Override
   protected setPossibleMoves(
-    possibleMoves: boolean[][],
+    possibleMoves: Matrix<boolean>,
     createPosition: (row: number, column: number) => Position
   ): void {
     if (this.position) {
       const position = createPosition(this.position.row, this.position.column);
       if (this.canMove(position)) {
-        possibleMoves[position.row][position.column] = true;
+        possibleMoves.set(true, position);
       }
     }
   }
