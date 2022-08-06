@@ -1,5 +1,5 @@
 import { ChessMatch } from './chess-match';
-import { ChessPosition, Row } from './chess-position';
+import { ChessPosition } from './chess-position';
 import { Color } from './color';
 import { Bishop } from './pieces/bishop';
 import { King } from './pieces/king';
@@ -33,16 +33,8 @@ describe('ChessMatch', () => {
       const chessMatch = new ChessMatch();
       const pieces = chessMatch.pieces();
       expect(pieces).toBeDefined();
-      expect(pieces.length).toBe(8);
-      expect(pieces[0].length).toBe(8);
-      expect(pieces[1].length).toBe(8);
-      expect(pieces[2].length).toBe(8);
-      expect(pieces[3].length).toBe(8);
-      expect(pieces[4].length).toBe(8);
-      expect(pieces[5].length).toBe(8);
-      expect(pieces[6].length).toBe(8);
-      expect(pieces[7].length).toBe(8);
-      expect(pieces[8]).toBeUndefined();
+      expect(pieces.rows).toBe(8);
+      expect(pieces.columns).toBe(8);
     });
 
     it('should get pieces in right places (WHITE)', () => {
@@ -51,45 +43,45 @@ describe('ChessMatch', () => {
       const pieces = chessMatch.pieces();
 
       let position = new ChessPosition('a', 1).toPosition();
-      expect(pieces[position.row][position.column]).toBeInstanceOf(Rook);
-      expect(pieces[position.row][position.column].color).toBe(white);
+      expect(pieces.get(position)).toBeInstanceOf(Rook);
+      expect(pieces.get(position).color).toBe(white);
 
       position = new ChessPosition('b', 1).toPosition();
-      expect(pieces[position.row][position.column]).toBeInstanceOf(Knight);
-      expect(pieces[position.row][position.column].color).toBe(white);
+      expect(pieces.get(position)).toBeInstanceOf(Knight);
+      expect(pieces.get(position).color).toBe(white);
 
       position = new ChessPosition('c', 1).toPosition();
-      expect(pieces[position.row][position.column]).toBeInstanceOf(Bishop);
-      expect(pieces[position.row][position.column].color).toBe(white);
+      expect(pieces.get(position)).toBeInstanceOf(Bishop);
+      expect(pieces.get(position).color).toBe(white);
 
       position = new ChessPosition('d', 1).toPosition();
-      expect(pieces[position.row][position.column]).toBeInstanceOf(Queen);
-      expect(pieces[position.row][position.column].color).toBe(white);
+      expect(pieces.get(position)).toBeInstanceOf(Queen);
+      expect(pieces.get(position).color).toBe(white);
 
       position = new ChessPosition('e', 1).toPosition();
-      expect(pieces[position.row][position.column]).toBeInstanceOf(King);
-      expect(pieces[position.row][position.column].color).toBe(white);
+      expect(pieces.get(position)).toBeInstanceOf(King);
+      expect(pieces.get(position).color).toBe(white);
 
       position = new ChessPosition('f', 1).toPosition();
-      expect(pieces[position.row][position.column]).toBeInstanceOf(Bishop);
-      expect(pieces[position.row][position.column].color).toBe(white);
+      expect(pieces.get(position)).toBeInstanceOf(Bishop);
+      expect(pieces.get(position).color).toBe(white);
 
       position = new ChessPosition('g', 1).toPosition();
-      expect(pieces[position.row][position.column]).toBeInstanceOf(Knight);
-      expect(pieces[position.row][position.column].color).toBe(white);
+      expect(pieces.get(position)).toBeInstanceOf(Knight);
+      expect(pieces.get(position).color).toBe(white);
 
       position = new ChessPosition('h', 1).toPosition();
-      expect(pieces[position.row][position.column]).toBeInstanceOf(Rook);
-      expect(pieces[position.row][position.column].color).toBe(white);
+      expect(pieces.get(position)).toBeInstanceOf(Rook);
+      expect(pieces.get(position).color).toBe(white);
 
       for (let row of ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']) {
         position = new ChessPosition(row as any, 2).toPosition();
-        expect(pieces[position.row][position.column]).toBeInstanceOf(Pawn);
-        expect(pieces[position.row][position.column].color).toBe(white);
+        expect(pieces.get(position)).toBeInstanceOf(Pawn);
+        expect(pieces.get(position).color).toBe(white);
 
         for (let i = 3; i < 5; i++) {
           position = new ChessPosition(row as any, i as any).toPosition();
-          expect(pieces[position.row][position.column]).toBeNull();
+          expect(pieces.get(position)).toBeNull();
         }
       }
     });
@@ -100,45 +92,45 @@ describe('ChessMatch', () => {
       const pieces = chessMatch.pieces();
 
       let position = new ChessPosition('a', 8).toPosition();
-      expect(pieces[position.row][position.column]).toBeInstanceOf(Rook);
-      expect(pieces[position.row][position.column].color).toBe(black);
+      expect(pieces.get(position)).toBeInstanceOf(Rook);
+      expect(pieces.get(position).color).toBe(black);
 
       position = new ChessPosition('b', 8).toPosition();
-      expect(pieces[position.row][position.column]).toBeInstanceOf(Knight);
-      expect(pieces[position.row][position.column].color).toBe(black);
+      expect(pieces.get(position)).toBeInstanceOf(Knight);
+      expect(pieces.get(position).color).toBe(black);
 
       position = new ChessPosition('c', 8).toPosition();
-      expect(pieces[position.row][position.column]).toBeInstanceOf(Bishop);
-      expect(pieces[position.row][position.column].color).toBe(black);
+      expect(pieces.get(position)).toBeInstanceOf(Bishop);
+      expect(pieces.get(position).color).toBe(black);
 
       position = new ChessPosition('d', 8).toPosition();
-      expect(pieces[position.row][position.column]).toBeInstanceOf(Queen);
-      expect(pieces[position.row][position.column].color).toBe(black);
+      expect(pieces.get(position)).toBeInstanceOf(Queen);
+      expect(pieces.get(position).color).toBe(black);
 
       position = new ChessPosition('e', 8).toPosition();
-      expect(pieces[position.row][position.column]).toBeInstanceOf(King);
-      expect(pieces[position.row][position.column].color).toBe(black);
+      expect(pieces.get(position)).toBeInstanceOf(King);
+      expect(pieces.get(position).color).toBe(black);
 
       position = new ChessPosition('f', 8).toPosition();
-      expect(pieces[position.row][position.column]).toBeInstanceOf(Bishop);
-      expect(pieces[position.row][position.column].color).toBe(black);
+      expect(pieces.get(position)).toBeInstanceOf(Bishop);
+      expect(pieces.get(position).color).toBe(black);
 
       position = new ChessPosition('g', 8).toPosition();
-      expect(pieces[position.row][position.column]).toBeInstanceOf(Knight);
-      expect(pieces[position.row][position.column].color).toBe(black);
+      expect(pieces.get(position)).toBeInstanceOf(Knight);
+      expect(pieces.get(position).color).toBe(black);
 
       position = new ChessPosition('h', 8).toPosition();
-      expect(pieces[position.row][position.column]).toBeInstanceOf(Rook);
-      expect(pieces[position.row][position.column].color).toBe(black);
+      expect(pieces.get(position)).toBeInstanceOf(Rook);
+      expect(pieces.get(position).color).toBe(black);
 
       for (let row of ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']) {
         position = new ChessPosition(row as any, 7).toPosition();
-        expect(pieces[position.row][position.column]).toBeInstanceOf(Pawn);
-        expect(pieces[position.row][position.column].color).toBe(black);
+        expect(pieces.get(position)).toBeInstanceOf(Pawn);
+        expect(pieces.get(position).color).toBe(black);
 
         for (let i = 5; i < 7; i++) {
           position = new ChessPosition(row as any, i as any).toPosition();
-          expect(pieces[position.row][position.column]).toBeNull();
+          expect(pieces.get(position)).toBeNull();
         }
       }
     });
@@ -149,7 +141,9 @@ describe('ChessMatch', () => {
       const chessMatch = new ChessMatch();
       const source = new ChessPosition('e', 2);
       const possibleMoves = chessMatch.possibleMoves(source);
-      expect(possibleMoves.length).toBeGreaterThan(0);
+      expect(possibleMoves.get(new ChessPosition('e', 3).toPosition())).toBeTruthy();
+      expect(possibleMoves.get(new ChessPosition('e', 4).toPosition())).toBeTruthy();
+      expect(possibleMoves.get(new ChessPosition('e', 5).toPosition())).toBeFalsy();
     });
   });
 

@@ -1,7 +1,7 @@
 import { Board } from '@src/board/domain/board';
 import { Position } from '@src/board/domain/position';
 
-import createMatrix from '@shared/domain/helpers/create-matrix';
+import { Matrix } from '@shared/domain/matrix/matrix';
 import { Piece } from '@shared/domain/piece';
 
 import { ChessPiece } from './chess-piece';
@@ -56,20 +56,12 @@ export class ChessMatch {
     return this._board;
   }
 
-  public pieces(): ChessPiece[][] {
+  public pieces(): Matrix<ChessPiece> {
     const { rows, columns } = this._board;
-    const matrix = createMatrix<ChessPiece>(rows)(columns);
-    this.fillPieces(matrix);
-    return matrix;
-  }
-
-  private fillPieces(pieces: ChessPiece[][]): void {
-    const { rows, columns } = this._board;
-    for (let i = 0; i < rows; i++) {
-      for (let j = 0; j < columns; j++) {
-        pieces[i][j] = this._board.piece({ row: i, column: j }) as ChessPiece;
-      }
-    }
+    const chessPieces = new Matrix<ChessPiece>(rows, columns);
+    const pieces = this._board.pieces();
+    chessPieces.fill(pieces as Matrix<ChessPiece>);
+    return chessPieces;
   }
 
   protected initialSetup(): void {
@@ -123,7 +115,7 @@ export class ChessMatch {
     this.piecesOnTheBoard.push(piece);
   }
 
-  public possibleMoves(sourcePosition: ChessPosition): boolean[][] {
+  public possibleMoves(sourcePosition: ChessPosition): Matrix<boolean> {
     const position = sourcePosition.toPosition();
     this.validateSourcePosition(position);
     return (this._board.piece(position) as Piece).possibleMoves();
@@ -200,9 +192,9 @@ export class ChessMatch {
   }
 
   private testCheck(color: Color): boolean {
-    const { row, column } = this.king(color).chessPosition.toPosition();
+    const position = this.king(color).chessPosition.toPosition();
     const opponentPieces = this.piecesOnTheBoard.filter((p) => p.color === this.opponent(color));
-    const isCheck = opponentPieces.some((p) => p.possibleMoves()[row][column]);
+    const isCheck = opponentPieces.some((p) => p.possibleMoves().get(position));
     return isCheck;
   }
 
@@ -248,7 +240,7 @@ export class ChessMatch {
     const possibleMoves = piece.possibleMoves();
     for (let row = 0; row < this._board.rows; row++) {
       for (let column = 0; column < this._board.columns; column++) {
-        if (possibleMoves[row][column]) {
+        if (possibleMoves.get({ row, column })) {
           const target = new Position(row, column);
           const isCheck = this.testMoveToPullOutCheckMate(color, piece, target);
           if (!isCheck) return true;
