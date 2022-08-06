@@ -4,9 +4,10 @@ import { BoardInterface } from '@shared/domain/interfaces/board.interface';
 
 import { ChessPiece } from './chess-piece';
 import { Color } from './color';
+import { Matrix } from '@shared/domain/matrix/matrix';
 
 class ChessPieceMock extends ChessPiece {
-  public possibleMoves(): boolean[][] {
+  public possibleMoves(): Matrix<boolean> {
     return this.createMatrixPossibleMoves();
   }
 }

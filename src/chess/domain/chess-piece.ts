@@ -1,6 +1,7 @@
 import { Position } from '@src/board/domain/position';
 
 import { BoardInterface } from '@shared/domain/interfaces/board.interface';
+import { Matrix } from '@shared/domain/matrix/matrix';
 import { Piece } from '@shared/domain/piece';
 
 import { ChessPosition } from './chess-position';
@@ -36,18 +37,17 @@ export abstract class ChessPiece extends Piece {
   }
 
   protected setPossibleMoves(
-    possibleMoves: boolean[][],
+    possibleMoves: Matrix<boolean>,
     createPosition: (row: number, column: number) => Position
   ): void {
     if (this.position) {
       let position = createPosition(this.position.row, this.position.column);
       while (this.canMoveInEmptyPosition(position)) {
-        const { row, column } = position;
-        possibleMoves[row][column] = true;
-        position = createPosition(row, column);
+        possibleMoves.set(true, position);
+        position = createPosition(position.row, position.column);
       }
       if (this.canMoveInOpponentPosition(position)) {
-        possibleMoves[position.row][position.column] = true;
+        possibleMoves.set(true, position);
       }
     }
   }
