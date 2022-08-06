@@ -4,11 +4,11 @@ import { Matrix } from '@shared/domain/matrix';
 
 import { ChessPiece } from '../chess-piece';
 
-const above = 1;
-const below = -1;
+const ABOVE = 1;
+const BELOW = -1;
 
 export class Pawn extends ChessPiece {
-  private readonly _direction = this.isWhite ? above : below;
+  private readonly _direction = this.isWhite ? ABOVE : BELOW;
 
   //@Override
   public possibleMoves(): Matrix<boolean> {
