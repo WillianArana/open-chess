@@ -1,27 +1,30 @@
-import createMatrix from '@shared/domain/helpers/create-matrix';
+import { PositionInterface } from '@shared/domain/interfaces/position.interface';
+import { Matrix } from '@shared/domain/matrix/matrix';
 import { Piece } from '@shared/domain/piece';
 
 import { BoardInterface } from '../../@shared/domain/interfaces/board.interface';
 import { BoardError } from './board.error';
-import { Position } from './position';
 
-type PositionType = Position | { row: number; column: number };
+type PositionType = PositionInterface | { row: number; column: number };
 type PieceType = Piece & { position: PositionType | null };
 
 export class Board implements BoardInterface {
-  private readonly _pieces: (Piece | null)[][];
+  private readonly _pieces: Matrix<Piece | null>;
 
   constructor(public readonly rows: number, public readonly columns: number) {
     if (rows < 1 || columns < 1) {
       throw new BoardError('Error creating board: there must be at least 1 row and 1 column');
     }
-    this._pieces = createMatrix<Piece>(rows)(columns);
+    this._pieces = new Matrix<Piece>(rows, columns);
+  }
+
+  public pieces(): Matrix<Piece | null> {
+    return this._pieces;
   }
 
   public piece(position: PositionType): Piece | null {
     this.positionValidate(position);
-    const { row, column } = position;
-    return this._pieces[row][column];
+    return this._pieces.get(position);
   }
 
   private positionValidate(position: PositionType): void {
@@ -35,10 +38,9 @@ export class Board implements BoardInterface {
     return row >= 0 && row < this.rows && column >= 0 && column < this.columns;
   }
 
-  public placePiece(piece: Piece, position: Position): void {
+  public placePiece(piece: Piece, position: PositionInterface): void {
     this.placePieceValidate(position);
-    const { row, column } = position;
-    this._pieces[row][column] = piece;
+    this._pieces.set(piece, position);
     (piece as PieceType).position = position;
   }
 
@@ -58,7 +60,7 @@ export class Board implements BoardInterface {
     const piece = this.piece(position);
     if (piece) {
       (piece as PieceType).position = null;
-      this._pieces[position.row][position.column] = null;
+      this._pieces.set(null, position);
     }
     return piece;
   }
