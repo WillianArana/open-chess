@@ -8,12 +8,19 @@ import { ChessPiece } from './chess-piece';
 import { ChessPosition, Column, Row } from './chess-position';
 import { ChessError } from './chess.error';
 import { Color } from './color';
-import { Bishop } from './pieces/bishop';
+import { BishopBlack } from './pieces/black/bishop.black';
+import { KingBlack } from './pieces/black/king.black';
+import { KnightBlack } from './pieces/black/knight.black';
+import { PawnBlack } from './pieces/black/pawn.black';
+import { QueenBlack } from './pieces/black/queen.black';
+import { RookBlack } from './pieces/black/rook.black';
 import { King } from './pieces/king';
-import { Knight } from './pieces/knight';
-import { Pawn } from './pieces/pawn';
-import { Queen } from './pieces/queen';
-import { Rook } from './pieces/rook';
+import { BishopWhite } from './pieces/white/bishop.white';
+import { KingWhite } from './pieces/white/king.white';
+import { KnightWhite } from './pieces/white/knight.white';
+import { PawnWhite } from './pieces/white/pawn.white';
+import { QueenWhite } from './pieces/white/queen.white';
+import { RookWhite } from './pieces/white/rook.white';
 import ROWS_AMOUNT from './rows-amount';
 
 const COLUMN_AMOUNT = ROWS_AMOUNT;
@@ -71,33 +78,33 @@ export class ChessMatch {
 
   private placeWhitePieces(): void {
     const board = this._board;
-    this.placeNewPiece('a', 1, new Rook(board, Color.White));
-    this.placeNewPiece('b', 1, new Knight(board, Color.White));
-    this.placeNewPiece('c', 1, new Bishop(board, Color.White));
-    this.placeNewPiece('d', 1, new Queen(board, Color.White));
-    this.placeNewPiece('e', 1, new King(board, Color.White));
-    this.placeNewPiece('f', 1, new Bishop(board, Color.White));
-    this.placeNewPiece('g', 1, new Knight(board, Color.White));
-    this.placeNewPiece('h', 1, new Rook(board, Color.White));
+    this.placeNewPiece('a', 1, new RookWhite(board));
+    this.placeNewPiece('b', 1, new KnightWhite(board));
+    this.placeNewPiece('c', 1, new BishopWhite(board));
+    this.placeNewPiece('d', 1, new QueenWhite(board));
+    this.placeNewPiece('e', 1, new KingWhite(board));
+    this.placeNewPiece('f', 1, new BishopWhite(board));
+    this.placeNewPiece('g', 1, new KnightWhite(board));
+    this.placeNewPiece('h', 1, new RookWhite(board));
 
     for (const column of 'abcdefgh') {
-      this.placeNewPiece(column as Column, 2, new Pawn(board, Color.White));
+      this.placeNewPiece(column as Column, 2, new PawnWhite(board));
     }
   }
 
   private placeBlackPieces(): void {
     const board = this._board;
-    this.placeNewPiece('a', 8, new Rook(board, Color.Black));
-    this.placeNewPiece('b', 8, new Knight(board, Color.Black));
-    this.placeNewPiece('c', 8, new Bishop(board, Color.Black));
-    this.placeNewPiece('d', 8, new Queen(board, Color.Black));
-    this.placeNewPiece('e', 8, new King(board, Color.Black));
-    this.placeNewPiece('f', 8, new Bishop(board, Color.Black));
-    this.placeNewPiece('g', 8, new Knight(board, Color.Black));
-    this.placeNewPiece('h', 8, new Rook(board, Color.Black));
+    this.placeNewPiece('a', 8, new RookBlack(board));
+    this.placeNewPiece('b', 8, new KnightBlack(board));
+    this.placeNewPiece('c', 8, new BishopBlack(board));
+    this.placeNewPiece('d', 8, new QueenBlack(board));
+    this.placeNewPiece('e', 8, new KingBlack(board));
+    this.placeNewPiece('f', 8, new BishopBlack(board));
+    this.placeNewPiece('g', 8, new KnightBlack(board));
+    this.placeNewPiece('h', 8, new RookBlack(board));
 
     for (const column of 'abcdefgh') {
-      this.placeNewPiece(column as Column, 7, new Pawn(board, Color.Black));
+      this.placeNewPiece(column as Column, 7, new PawnBlack(board));
     }
   }
 
