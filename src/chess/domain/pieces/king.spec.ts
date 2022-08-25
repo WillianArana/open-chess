@@ -12,7 +12,7 @@ describe('King', () => {
     board = new Board(8, 8);
   });
 
-  it(`should be create king`, () => {
+  it(`should be create`, () => {
     expect(new King(new Board(1, 1), Color.White)).toBeDefined();
   });
 

@@ -1,14 +1,21 @@
 import { Position } from '@src/board/domain/position';
 
+import { BoardInterface } from '@shared/domain/interfaces/board.interface';
 import { Matrix } from '@shared/domain/matrix';
 
 import { ChessPiece } from '../chess-piece';
+import { Color } from '../color';
 
 const ABOVE = 1;
 const BELOW = -1;
 
 export class Pawn extends ChessPiece {
-  private readonly _direction = this.isWhite ? ABOVE : BELOW;
+  private readonly _direction: typeof ABOVE | typeof BELOW;
+
+  constructor(board: BoardInterface, color: Color) {
+    super(board, color);
+    this._direction = this.isWhite ? ABOVE : BELOW;
+  }
 
   //@Override
   public possibleMoves(): Matrix<boolean> {
