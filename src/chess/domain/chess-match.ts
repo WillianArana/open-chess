@@ -82,7 +82,7 @@ export class ChessMatch {
     this.placeNewPiece('b', 1, new KnightWhite(board));
     this.placeNewPiece('c', 1, new BishopWhite(board));
     this.placeNewPiece('d', 1, new QueenWhite(board));
-    this.placeNewPiece('e', 1, new KingWhite(board));
+    this.placeNewPiece('e', 1, new KingWhite(board, this));
     this.placeNewPiece('f', 1, new BishopWhite(board));
     this.placeNewPiece('g', 1, new KnightWhite(board));
     this.placeNewPiece('h', 1, new RookWhite(board));
@@ -98,7 +98,7 @@ export class ChessMatch {
     this.placeNewPiece('b', 8, new KnightBlack(board));
     this.placeNewPiece('c', 8, new BishopBlack(board));
     this.placeNewPiece('d', 8, new QueenBlack(board));
-    this.placeNewPiece('e', 8, new KingBlack(board));
+    this.placeNewPiece('e', 8, new KingBlack(board, this));
     this.placeNewPiece('f', 8, new BishopBlack(board));
     this.placeNewPiece('g', 8, new KnightBlack(board));
     this.placeNewPiece('h', 8, new RookBlack(board));
@@ -172,14 +172,58 @@ export class ChessMatch {
     piece.increaseMoveCount();
     const capturedPiece = this._board.removePiece(target);
     this._board.placePiece(piece, target);
+
+    this.specialMoveCastlingKingSideRook(piece, source, target);
+    this.specialMoveCastlingQueenSideRook(piece, source, target);
+
     return capturedPiece;
+  }
+
+  private specialMoveCastlingKingSideRook(
+    piece: ChessPiece,
+    source: Position,
+    target: Position
+  ): void {
+    if (this.checkCastlingKingSideRook(piece, source, target)) {
+      const rookSource = new Position(source.row, source.column + 3);
+      const rookTarget = new Position(source.row, source.column + 1);
+      this.makeMove(rookSource, rookTarget);
+    }
+  }
+
+  private checkCastlingKingSideRook(
+    piece: ChessPiece,
+    source: Position,
+    target: Position
+  ): boolean {
+    return King.isInstance(piece) && target.column === source.column + 2;
+  }
+
+  private specialMoveCastlingQueenSideRook(
+    piece: ChessPiece,
+    source: Position,
+    target: Position
+  ): void {
+    if (this.checkCastlingQueenSideRook(piece, source, target)) {
+      const rookSource = new Position(source.row, source.column - 4);
+      const rookTarget = new Position(source.row, source.column - 1);
+      this.makeMove(rookSource, rookTarget);
+    }
+  }
+
+  private checkCastlingQueenSideRook(
+    piece: ChessPiece,
+    source: Position,
+    target: Position
+  ): boolean {
+    return King.isInstance(piece) && target.column === source.column - 2;
   }
 
   private addPossibleCapturedPiece(piece: ChessPiece | null): void {
     if (piece) {
       this.capturedPieces.push(piece);
       const index = this.piecesOnTheBoard.indexOf(piece);
-      if (index > -1) {
+      if (index !== -1) {
         this.piecesOnTheBoard.splice(index, 1);
       }
     }
@@ -218,12 +262,41 @@ export class ChessMatch {
       this._board.placePiece(capturedPiece, target);
       this.removeCapturedPiece(capturedPiece);
     }
+
+    this.specialUndoMoveCastlingKingSideRook(piece, source, target);
+    this.specialUndoMoveCastlingQueenSideRook(piece, source, target);
+  }
+
+  private specialUndoMoveCastlingKingSideRook(
+    piece: ChessPiece,
+    source: Position,
+    target: Position
+  ): void {
+    if (this.checkCastlingKingSideRook(piece, source, target)) {
+      const rookSource = new Position(source.row, source.column + 3);
+      const rookTarget = new Position(source.row, source.column + 1);
+      const rook = this._board.piece(rookSource) as ChessPiece;
+      this.undoMove(rookSource, rookTarget, rook);
+    }
+  }
+
+  protected specialUndoMoveCastlingQueenSideRook(
+    piece: ChessPiece,
+    source: Position,
+    target: Position
+  ): void {
+    if (this.checkCastlingQueenSideRook(piece, source, target)) {
+      const rookSource = new Position(source.row, source.column - 4);
+      const rookTarget = new Position(source.row, source.column - 1);
+      const rook = this._board.piece(rookSource) as ChessPiece;
+      this.undoMove(rookSource, rookTarget, rook);
+    }
   }
 
   private removeCapturedPiece(piece: ChessPiece): void {
-    this.piecesOnTheBoard.push(piece);
     const index = this.capturedPieces.indexOf(piece);
-    if (index > -1) {
+    if (index !== -1) {
+      this.piecesOnTheBoard.push(piece);
       this.capturedPieces.splice(index, 1);
     }
   }

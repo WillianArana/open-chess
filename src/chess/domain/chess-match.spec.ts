@@ -1,3 +1,4 @@
+import { Board } from '@src/board/domain/board';
 import { ChessMatch } from './chess-match';
 import { ChessPosition } from './chess-position';
 import { Color } from './color';
@@ -158,12 +159,16 @@ describe('ChessMatch', () => {
 
     it('should be captured piece', () => {
       class ChessMatchMock extends ChessMatch {
+        get isCheck(): boolean {
+          return true;
+        }
+
         protected initialSetup(): void {
           const board = this.board;
-          this.placeNewPiece('e', 1, new King(board, Color.White));
+          this.placeNewPiece('e', 1, new King(board, Color.White, this));
           this.placeNewPiece('e', 2, new Rook(board, Color.White));
 
-          this.placeNewPiece('e', 8, new King(board, Color.Black));
+          this.placeNewPiece('e', 8, new King(board, Color.Black, this));
           this.placeNewPiece('e', 7, new Rook(board, Color.Black));
         }
       }
@@ -219,14 +224,14 @@ describe('ChessMatch', () => {
       class ChessMatchMock extends ChessMatch {
         protected initialSetup(): void {
           const board = this.board;
-          this.placeNewPiece('e', 1, new King(board, Color.White));
+          this.placeNewPiece('e', 1, new King(board, Color.White, this));
           this.placeNewPiece('e', 2, new Rook(board, Color.White));
           this.placeNewPiece('d', 2, new Rook(board, Color.White));
           this.placeNewPiece('f', 2, new Rook(board, Color.White));
           this.placeNewPiece('d', 1, new Rook(board, Color.White));
           this.placeNewPiece('f', 1, new Rook(board, Color.White));
 
-          this.placeNewPiece('e', 8, new King(board, Color.Black));
+          this.placeNewPiece('e', 8, new King(board, Color.Black, this));
           this.placeNewPiece('d', 8, new Rook(board, Color.Black));
           this.placeNewPiece('f', 8, new Rook(board, Color.Black));
           this.placeNewPiece('d', 7, new Rook(board, Color.Black));
@@ -254,14 +259,18 @@ describe('ChessMatch', () => {
 
     it('should be checkmate', () => {
       class ChessMatchMock extends ChessMatch {
+        get isCheck(): boolean {
+          return true;
+        }
+
         protected initialSetup(): void {
           const board = this.board;
           this.placeNewPiece('h', 7, new Rook(board, Color.White));
           this.placeNewPiece('d', 1, new Rook(board, Color.White));
-          this.placeNewPiece('e', 1, new King(board, Color.White));
+          this.placeNewPiece('e', 1, new King(board, Color.White, this));
 
           this.placeNewPiece('b', 8, new Rook(board, Color.Black));
-          this.placeNewPiece('a', 8, new King(board, Color.Black));
+          this.placeNewPiece('a', 8, new King(board, Color.Black, this));
         }
       }
 
@@ -272,6 +281,124 @@ describe('ChessMatch', () => {
 
       expect(chessMatchMock.isCheck).toBeTruthy();
       expect(chessMatchMock.isCheckMate).toBeTruthy();
+    });
+
+    describe('castling', () => {
+      it('should be perform castling move (KING SIDE ROOK)', () => {
+        let board!: Board;
+        class ChessMatchMock extends ChessMatch {
+          protected initialSetup(): void {
+            board = this.board;
+            this.placeNewPiece('e', 1, new King(board, Color.White, this));
+            this.placeNewPiece('a', 1, new Rook(board, Color.White));
+            this.placeNewPiece('h', 1, new Rook(board, Color.White));
+
+            this.placeNewPiece('e', 8, new King(board, Color.Black, this));
+            this.placeNewPiece('a', 8, new Rook(board, Color.Black));
+            this.placeNewPiece('h', 8, new Rook(board, Color.Black));
+          }
+        }
+
+        const chessMatchMock = new ChessMatchMock();
+        let source = new ChessPosition('e', 1);
+        let target = new ChessPosition('g', 1);
+        const capturedPiece = chessMatchMock.performChessMove(source, target);
+        const king = board.piece(target.toPosition());
+        const rook = board.piece(new ChessPosition('f', 1).toPosition());
+
+        expect(capturedPiece).toBeNull();
+        expect(king).toBeInstanceOf(King);
+        expect(rook).toBeInstanceOf(Rook);
+        expect(chessMatchMock.isCheck).toBeFalsy();
+        expect(chessMatchMock.isCheckMate).toBeFalsy();
+      });
+
+      it('should be perform castling move (QUEEN SIDE ROOK)', () => {
+        let board!: Board;
+        class ChessMatchMock extends ChessMatch {
+          protected initialSetup(): void {
+            board = this.board;
+            this.placeNewPiece('e', 1, new King(board, Color.White, this));
+            this.placeNewPiece('a', 1, new Rook(board, Color.White));
+            this.placeNewPiece('h', 1, new Rook(board, Color.White));
+
+            this.placeNewPiece('e', 8, new King(board, Color.Black, this));
+            this.placeNewPiece('a', 8, new Rook(board, Color.Black));
+            this.placeNewPiece('h', 8, new Rook(board, Color.Black));
+          }
+        }
+
+        const chessMatchMock = new ChessMatchMock();
+        let source = new ChessPosition('e', 1);
+        let target = new ChessPosition('c', 1);
+        const capturedPiece = chessMatchMock.performChessMove(source, target);
+        const king = board.piece(target.toPosition());
+        const rook = board.piece(new ChessPosition('d', 1).toPosition());
+
+        expect(capturedPiece).toBeNull();
+        expect(king).toBeInstanceOf(King);
+        expect(rook).toBeInstanceOf(Rook);
+        expect(chessMatchMock.isCheck).toBeFalsy();
+        expect(chessMatchMock.isCheckMate).toBeFalsy();
+      });
+
+      it('should throw an error when player put yourself in check (KING SIDE ROOK)', () => {
+        let board!: Board;
+        class ChessMatchMock extends ChessMatch {
+          protected initialSetup(): void {
+            board = this.board;
+            this.placeNewPiece('e', 1, new King(board, Color.White, this));
+            this.placeNewPiece('a', 1, new Rook(board, Color.White));
+            this.placeNewPiece('h', 1, new Rook(board, Color.White));
+
+            this.placeNewPiece('e', 8, new King(board, Color.Black, this));
+            this.placeNewPiece('c', 8, new Rook(board, Color.Black));
+            this.placeNewPiece('g', 8, new Rook(board, Color.Black));
+          }
+        }
+
+        const chessMatchMock = new ChessMatchMock();
+        let source = new ChessPosition('e', 1);
+        let target = new ChessPosition('g', 1);
+
+        expect(() => chessMatchMock.performChessMove(source, target)).toThrowError(
+          `You can't put yourself in check`
+        );
+
+        const king = board.piece(source.toPosition());
+        const rook = board.piece(new ChessPosition('h', 1).toPosition());
+        expect(king).toBeInstanceOf(King);
+        expect(rook).toBeInstanceOf(Rook);
+      });
+
+      it('should throw an error when player put yourself in check (QUEEN SIDE ROOK)', () => {
+        let board!: Board;
+        class ChessMatchMock extends ChessMatch {
+          protected initialSetup(): void {
+            board = this.board;
+            this.placeNewPiece('e', 1, new King(board, Color.White, this));
+            this.placeNewPiece('a', 1, new Rook(board, Color.White));
+            this.placeNewPiece('h', 1, new Rook(board, Color.White));
+
+            this.placeNewPiece('e', 8, new King(board, Color.Black, this));
+            this.placeNewPiece('c', 8, new Rook(board, Color.Black));
+            this.placeNewPiece('g', 8, new Rook(board, Color.Black));
+          }
+        }
+
+        const chessMatchMock = new ChessMatchMock();
+        let source = new ChessPosition('e', 1);
+        let target = new ChessPosition('c', 1);
+
+        expect(() => chessMatchMock.performChessMove(source, target)).toThrowError(
+          `You can't put yourself in check`
+        );
+
+        const king = board.piece(source.toPosition());
+        const rook = board.piece(new ChessPosition('a', 1).toPosition());
+        expect(king).toBeInstanceOf(King);
+        expect(rook).toBeInstanceOf(Rook);
+      });
     });
   });
 });

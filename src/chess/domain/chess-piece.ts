@@ -24,7 +24,7 @@ export abstract class ChessPiece extends Piece {
     return ChessPosition.fromPosition(piecePosition);
   }
 
-  protected get moveCount(): number {
+  public get moveCount(): number {
     return this._moveCount;
   }
 
