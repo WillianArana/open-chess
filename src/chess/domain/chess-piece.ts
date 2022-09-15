@@ -38,7 +38,7 @@ export abstract class ChessPiece extends Piece {
 
   protected setPossibleMoves(
     possibleMoves: Matrix<boolean>,
-    createPosition: (row: number, column: number) => Position
+    createPosition: (row: number, column: number) => Position,
   ): void {
     if (this.position) {
       let position = createPosition(this.position.row, this.position.column);

@@ -12,4 +12,12 @@ export default {
     '@shared/(.*)': '<rootDir>/src/@shared/$1',
     '@src/(.*)': '<rootDir>/src/$1',
   },
+  coverageThreshold: {
+    global: {
+      statements: 100,
+      branches: 100,
+      functions: 100,
+      lines: 100,
+    },
+  },
 };

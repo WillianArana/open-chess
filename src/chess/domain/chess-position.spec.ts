@@ -9,15 +9,15 @@ describe('ChessPosition', () => {
 
   it('should throw error "ChessPosition" when create position', () => {
     expect(() => new ChessPosition('a', 0 as Row)).toThrowError(
-      'Error instantiating ChessPosition. Valid values are from a1 to h8.'
+      'Error instantiating ChessPosition. Valid values are from a1 to h8.',
     );
 
     expect(() => new ChessPosition('a', 9 as Row)).toThrowError(
-      'Error instantiating ChessPosition. Valid values are from a1 to h8.'
+      'Error instantiating ChessPosition. Valid values are from a1 to h8.',
     );
 
     expect(() => new ChessPosition('x' as Column, 8)).toThrowError(
-      'Error instantiating ChessPosition. Valid values are from a1 to h8.'
+      'Error instantiating ChessPosition. Valid values are from a1 to h8.',
     );
   });
 
