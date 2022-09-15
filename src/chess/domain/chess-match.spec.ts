@@ -186,7 +186,7 @@ describe('ChessMatch', () => {
       const target = new ChessPosition('a', 5);
 
       expect(() => chessMatch.performChessMove(source, target)).toThrowError(
-        'There is no piece on source position'
+        'There is no piece on source position',
       );
     });
 
@@ -196,7 +196,7 @@ describe('ChessMatch', () => {
       const target = new ChessPosition('e', 2);
 
       expect(() => chessMatch.performChessMove(source, target)).toThrowError(
-        'There is no possible moves for the chosen piece'
+        'There is no possible moves for the chosen piece',
       );
     });
 
@@ -206,7 +206,7 @@ describe('ChessMatch', () => {
       const target = new ChessPosition('e', 1);
 
       expect(() => chessMatch.performChessMove(source, target)).toThrowError(
-        `There chose piece can't move to target position`
+        `There chose piece can't move to target position`,
       );
     });
 
@@ -216,7 +216,7 @@ describe('ChessMatch', () => {
       const target = new ChessPosition('e', 6);
 
       expect(() => chessMatch.performChessMove(source, target)).toThrowError(
-        'The chosen piece is not yours'
+        'The chosen piece is not yours',
       );
     });
 
@@ -253,7 +253,7 @@ describe('ChessMatch', () => {
       target = new ChessPosition('d', 8);
 
       expect(() => chessMatchMock.performChessMove(source, target)).toThrowError(
-        `You can't put yourself in check`
+        `You can't put yourself in check`,
       );
     });
 
@@ -362,7 +362,7 @@ describe('ChessMatch', () => {
         let target = new ChessPosition('g', 1);
 
         expect(() => chessMatchMock.performChessMove(source, target)).toThrowError(
-          `You can't put yourself in check`
+          `You can't put yourself in check`,
         );
 
         const king = board.piece(source.toPosition());
@@ -391,7 +391,7 @@ describe('ChessMatch', () => {
         let target = new ChessPosition('c', 1);
 
         expect(() => chessMatchMock.performChessMove(source, target)).toThrowError(
-          `You can't put yourself in check`
+          `You can't put yourself in check`,
         );
 
         const king = board.piece(source.toPosition());
