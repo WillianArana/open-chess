@@ -122,7 +122,7 @@ export class ChessMatch {
 
   public performChessMove(
     sourcePosition: ChessPosition,
-    targetPosition: ChessPosition
+    targetPosition: ChessPosition,
   ): ChessPiece | null {
     const source = sourcePosition.toPosition();
     const target = targetPosition.toPosition();
@@ -182,7 +182,7 @@ export class ChessMatch {
   private specialMoveCastlingKingSideRook(
     piece: ChessPiece,
     source: Position,
-    target: Position
+    target: Position,
   ): void {
     if (this.checkCastlingKingSideRook(piece, source, target)) {
       const rookSource = new Position(source.row, source.column + 3);
@@ -194,7 +194,7 @@ export class ChessMatch {
   private checkCastlingKingSideRook(
     piece: ChessPiece,
     source: Position,
-    target: Position
+    target: Position,
   ): boolean {
     return King.isInstance(piece) && target.column === source.column + 2;
   }
@@ -202,7 +202,7 @@ export class ChessMatch {
   private specialMoveCastlingQueenSideRook(
     piece: ChessPiece,
     source: Position,
-    target: Position
+    target: Position,
   ): void {
     if (this.checkCastlingQueenSideRook(piece, source, target)) {
       const rookSource = new Position(source.row, source.column - 4);
@@ -214,7 +214,7 @@ export class ChessMatch {
   private checkCastlingQueenSideRook(
     piece: ChessPiece,
     source: Position,
-    target: Position
+    target: Position,
   ): boolean {
     return King.isInstance(piece) && target.column === source.column - 2;
   }
@@ -232,7 +232,7 @@ export class ChessMatch {
   private verifyIfPutYourselfInCheck(
     source: Position,
     target: Position,
-    capturedPiece: ChessPiece | null
+    capturedPiece: ChessPiece | null,
   ): void {
     if (this.testCheck(this._currentPlayer)) {
       this.undoMove(source, target, capturedPiece);
@@ -270,7 +270,7 @@ export class ChessMatch {
   private specialUndoMoveCastlingKingSideRook(
     piece: ChessPiece,
     source: Position,
-    target: Position
+    target: Position,
   ): void {
     if (this.checkCastlingKingSideRook(piece, source, target)) {
       const rookSource = new Position(source.row, source.column + 3);
@@ -283,7 +283,7 @@ export class ChessMatch {
   protected specialUndoMoveCastlingQueenSideRook(
     piece: ChessPiece,
     source: Position,
-    target: Position
+    target: Position,
   ): void {
     if (this.checkCastlingQueenSideRook(piece, source, target)) {
       const rookSource = new Position(source.row, source.column - 4);
@@ -316,7 +316,7 @@ export class ChessMatch {
 
   private testCheckMate(color: Color): boolean {
     return !this.piecesOnTheBoard.some(
-      (p) => p.color === color && this.tryPullOutCheckMate(color, p)
+      (p) => p.color === color && this.tryPullOutCheckMate(color, p),
     );
   }
 

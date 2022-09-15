@@ -7,4 +7,4 @@ services:
     volumes:
       - .:/home/node/app
     ports:
-      - '8229:9229'
+      - '8229:9230'

@@ -9,7 +9,7 @@ export class MatrixIterator<T = unknown> implements MatrixIteratorInterface<T> {
     private readonly _items: T[][],
     private readonly _startValue: T,
     private readonly _rowLimit: number,
-    private readonly _columnLimit: number
+    private readonly _columnLimit: number,
   ) {}
 
   reset(): void {

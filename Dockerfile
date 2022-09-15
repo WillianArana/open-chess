@@ -27,6 +27,10 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
   -a 'export TERM=xterm-256color'
 
 RUN echo '[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh' >> ~/.zshrc && \
+<<<<<<< HEAD
   echo 'HISTFILE=/home/node/zsh/.zsh_history' >> ~/.zshrc
+=======
+    echo 'HISTFILE=/home/node/zsh/.zsh_history' >> ~/.zshrc
+>>>>>>> a05a86a5ccfa443fc971b29ebac97c1ab6cad3e9
 
 CMD [ "sh", "-c", "npm i && tail -f /dev/null" ]

@@ -36,7 +36,13 @@
     "firsttris.vscode-jest-runner",
     "vivaxy.vscode-conventional-commits",
     "EditorConfig.EditorConfig",
+<<<<<<< HEAD
     "rbbit.typescript-hero"
+=======
+    "rbbit.typescript-hero",
+    "esbenp.prettier-vscode",
+    "VisualStudioExptTeam.vscodeintellicode"
+>>>>>>> a05a86a5ccfa443fc971b29ebac97c1ab6cad3e9
   ]
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],

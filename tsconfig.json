@@ -3,7 +3,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "target": "es2021",
+    "target": "esnext",
     "sourceMap": true,
     "noImplicitAny": true,
     "strict": true,
@@ -37,7 +37,7 @@
     }
   },
   "lib": [
-    "es2021"
+    "esnext"
   ],
   "compileOnSave": true,
   "include": [

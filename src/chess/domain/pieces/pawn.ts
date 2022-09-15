@@ -53,7 +53,7 @@ export class Pawn extends ChessPiece {
   //@Override
   protected setPossibleMoves(
     possibleMoves: Matrix<boolean>,
-    createPosition: (row: number, column: number) => Position
+    createPosition: (row: number, column: number) => Position,
   ): void {
     if (this.position) {
       const position = createPosition(this.position.row, this.position.column);

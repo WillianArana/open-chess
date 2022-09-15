@@ -48,7 +48,7 @@ describe('Board', () => {
       const piece = { position, board } as unknown as Piece;
       board.placePiece(piece, position);
       expect(() => board.placePiece(piece, position)).toThrowError(
-        `There is already a piece on position ${position}`
+        `There is already a piece on position ${position}`,
       );
     });
   });
