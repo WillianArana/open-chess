@@ -23,16 +23,7 @@
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": true
-    },
-    "peacock.favoriteColors": [
-      {
-        "name": "Node",
-        "value": "#215732"
-      },
-    ],
-    "cSpell.words": [
-      "Seedwork"
-    ],
+    }
   },
   // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
