@@ -3,6 +3,8 @@ version: '3'
 services:
   app:
     build: .
-    container_name: api-micro-typescript-admcatalogovideos
+    container_name: open-chess
     volumes:
       - .:/home/node/app
+    ports:
+      - '8229:9230'
