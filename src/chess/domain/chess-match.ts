@@ -15,6 +15,7 @@ import { PawnBlack } from './pieces/black/pawn.black';
 import { QueenBlack } from './pieces/black/queen.black';
 import { RookBlack } from './pieces/black/rook.black';
 import { King } from './pieces/king';
+import { Pawn } from './pieces/pawn';
 import { BishopWhite } from './pieces/white/bishop.white';
 import { KingWhite } from './pieces/white/king.white';
 import { KnightWhite } from './pieces/white/knight.white';
@@ -38,6 +39,7 @@ export class ChessMatch {
   private _currentPlayer = Color.White;
   private _check = false;
   private _checkMate = false;
+  private _enPassantVulnerable: ChessPiece | null = null;
 
   constructor() {
     this.initialSetup();
@@ -57,6 +59,10 @@ export class ChessMatch {
 
   get isCheckMate(): boolean {
     return this._checkMate;
+  }
+
+  get enPassantVulnerable(): ChessPiece | null {
+    return this._enPassantVulnerable;
   }
 
   protected get board(): Board {
@@ -88,7 +94,7 @@ export class ChessMatch {
     this.placeNewPiece('h', 1, new RookWhite(board));
 
     for (const column of 'abcdefgh') {
-      this.placeNewPiece(column as Column, 2, new PawnWhite(board));
+      this.placeNewPiece(column as Column, 2, new PawnWhite(board, this));
     }
   }
 
@@ -104,7 +110,7 @@ export class ChessMatch {
     this.placeNewPiece('h', 8, new RookBlack(board));
 
     for (const column of 'abcdefgh') {
-      this.placeNewPiece(column as Column, 7, new PawnBlack(board));
+      this.placeNewPiece(column as Column, 7, new PawnBlack(board, this));
     }
   }
 
@@ -128,12 +134,28 @@ export class ChessMatch {
     const target = targetPosition.toPosition();
     this.validateSourcePosition(source);
     this.validateTargetPosition(source, target);
+
     const capturedPiece = this.makeMove(source, target) as ChessPiece | null;
     this.addPossibleCapturedPiece(capturedPiece);
     this.verifyIfPutYourselfInCheck(source, target, capturedPiece);
     this.loadStatus();
     this.isCheckMate || this.nextTurn();
+
+    const movedPiece = this.board.piece(target) as ChessPiece;
+    this.setIfHasEnPassantVulnerable(source, target, movedPiece);
+
     return capturedPiece;
+  }
+
+  private setIfHasEnPassantVulnerable(
+    source: Position,
+    target: Position,
+    movedPiece: ChessPiece,
+  ): void {
+    this._enPassantVulnerable =
+      movedPiece instanceof Pawn && (target.row === source.row - 2 || target.row === source.row + 2)
+        ? movedPiece
+        : null;
   }
 
   private validateSourcePosition(position: Position): void {
@@ -170,12 +192,27 @@ export class ChessMatch {
   private makeMove(source: Position, target: Position): Piece | null {
     const piece = this._board.removePiece(source) as ChessPiece;
     piece.increaseMoveCount();
-    const capturedPiece = this._board.removePiece(target);
+    let capturedPiece = this._board.removePiece(target);
     this._board.placePiece(piece, target);
 
     this.specialMoveCastlingKingSideRook(piece, source, target);
     this.specialMoveCastlingQueenSideRook(piece, source, target);
+    capturedPiece = this.specialMoveEnPassant(piece, source, target, capturedPiece);
 
+    return capturedPiece;
+  }
+
+  private specialMoveEnPassant(
+    piece: ChessPiece,
+    source: Position,
+    target: Position,
+    capturedPiece: Piece | null,
+  ): Piece | null {
+    if (piece instanceof Pawn && source.column !== target.column && capturedPiece === null) {
+      const row = piece.isWhite ? target.row + 1 : target.row - 1;
+      const pawnPosition = new Position(row, target.column);
+      capturedPiece = this.board.removePiece(pawnPosition);
+    }
     return capturedPiece;
   }
 
@@ -265,6 +302,25 @@ export class ChessMatch {
 
     this.specialUndoMoveCastlingKingSideRook(piece, source, target);
     this.specialUndoMoveCastlingQueenSideRook(piece, source, target);
+    this.specialUndoMoveEnPassant(piece, capturedPiece, source, target);
+  }
+
+  private specialUndoMoveEnPassant(
+    piece: ChessPiece,
+    capturedPiece: ChessPiece | null,
+    source: Position,
+    target: Position,
+  ): void {
+    if (
+      piece instanceof Pawn &&
+      source.column !== target.column &&
+      capturedPiece === this.enPassantVulnerable
+    ) {
+      const pawn = this.board.removePiece(target) as ChessPiece;
+      const row = piece.isWhite ? 3 : 4;
+      const pawnPosition = new Position(row, target.column);
+      this._board.placePiece(pawn, pawnPosition);
+    }
   }
 
   private specialUndoMoveCastlingKingSideRook(

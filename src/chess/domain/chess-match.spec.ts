@@ -75,7 +75,7 @@ describe('ChessMatch', () => {
       expect(pieces.get(position)).toBeInstanceOf(Rook);
       expect(pieces.get(position).color).toBe(white);
 
-      for (let row of ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']) {
+      for (let row of 'abcdefgh') {
         position = new ChessPosition(row as any, 2).toPosition();
         expect(pieces.get(position)).toBeInstanceOf(Pawn);
         expect(pieces.get(position).color).toBe(white);
@@ -124,7 +124,7 @@ describe('ChessMatch', () => {
       expect(pieces.get(position)).toBeInstanceOf(Rook);
       expect(pieces.get(position).color).toBe(black);
 
-      for (let row of ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']) {
+      for (let row of 'abcdefgh') {
         position = new ChessPosition(row as any, 7).toPosition();
         expect(pieces.get(position)).toBeInstanceOf(Pawn);
         expect(pieces.get(position).color).toBe(black);
@@ -398,6 +398,248 @@ describe('ChessMatch', () => {
         const rook = board.piece(new ChessPosition('a', 1).toPosition());
         expect(king).toBeInstanceOf(King);
         expect(rook).toBeInstanceOf(Rook);
+      });
+    });
+
+    describe('en passant', () => {
+      describe('with white piece', () => {
+        it('should be perform en passant move (RIGHT)', () => {
+          let board!: Board;
+          let pawn!: Pawn;
+          class ChessMatchMock extends ChessMatch {
+            protected initialSetup(): void {
+              board = this.board;
+              this.placeNewPiece('e', 1, new King(board, Color.White, this));
+              this.placeNewPiece('e', 3, new Pawn(board, Color.White, this));
+
+              this.placeNewPiece('e', 8, new King(board, Color.Black, this));
+
+              pawn = new Pawn(board, Color.Black, this);
+              this.placeNewPiece('f', 7, pawn);
+            }
+          }
+
+          const chessMatchMock = new ChessMatchMock();
+          let source = new ChessPosition('e', 3);
+          let target = new ChessPosition('e', 5);
+          let capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toBeNull();
+
+          source = new ChessPosition('f', 7);
+          target = new ChessPosition('f', 5);
+          capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toBeNull();
+
+          source = new ChessPosition('e', 5);
+          target = new ChessPosition('f', 6);
+          capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toStrictEqual(pawn);
+        });
+
+        it('should be perform en passant move (LEFT)', () => {
+          let board!: Board;
+          let pawn!: Pawn;
+          class ChessMatchMock extends ChessMatch {
+            protected initialSetup(): void {
+              board = this.board;
+              this.placeNewPiece('e', 1, new King(board, Color.White, this));
+              this.placeNewPiece('e', 3, new Pawn(board, Color.White, this));
+
+              this.placeNewPiece('e', 8, new King(board, Color.Black, this));
+
+              pawn = new Pawn(board, Color.Black, this);
+              this.placeNewPiece('d', 7, pawn);
+            }
+          }
+
+          const chessMatchMock = new ChessMatchMock();
+          let source = new ChessPosition('e', 3);
+          let target = new ChessPosition('e', 5);
+          let capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toBeNull();
+
+          source = new ChessPosition('d', 7);
+          target = new ChessPosition('d', 5);
+          capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toBeNull();
+
+          source = new ChessPosition('e', 5);
+          target = new ChessPosition('d', 6);
+          capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toStrictEqual(pawn);
+        });
+
+        it('should throw an error when player put yourself in check with en passant', () => {
+          let board!: Board;
+          class ChessMatchMock extends ChessMatch {
+            protected initialSetup(): void {
+              board = this.board;
+              this.placeNewPiece('e', 1, new King(board, Color.White, this));
+              this.placeNewPiece('d', 3, new Pawn(board, Color.White, this));
+
+              this.placeNewPiece('a', 8, new Rook(board, Color.Black));
+              this.placeNewPiece('e', 8, new King(board, Color.Black, this));
+              this.placeNewPiece('c', 7, new Pawn(board, Color.Black, this));
+            }
+          }
+
+          const chessMatchMock = new ChessMatchMock();
+          let source = new ChessPosition('d', 3);
+          let target = new ChessPosition('d', 5);
+          let capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toBeNull();
+
+          source = new ChessPosition('a', 8);
+          target = new ChessPosition('d', 8);
+          capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toBeNull();
+
+          source = new ChessPosition('e', 1);
+          target = new ChessPosition('d', 1);
+          capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toBeNull();
+
+          source = new ChessPosition('c', 7);
+          target = new ChessPosition('c', 5);
+          capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toBeNull();
+
+          source = new ChessPosition('d', 5);
+          target = new ChessPosition('c', 6);
+          expect(() => chessMatchMock.performChessMove(source, target)).toThrowError(
+            `You can't put yourself in check`,
+          );
+
+          const pawnWhite = board.piece(source.toPosition());
+          expect(pawnWhite).toBeInstanceOf(Pawn);
+          const pawnBlack = board.piece(new ChessPosition('c', 5).toPosition());
+          expect(pawnBlack).toBeInstanceOf(Pawn);
+        });
+      });
+
+      describe('with black piece', () => {
+        it('should be perform en passant move (LEFT)', () => {
+          let board!: Board;
+          let pawn!: Pawn;
+          class ChessMatchMock extends ChessMatch {
+            protected initialSetup(): void {
+              board = this.board;
+              this.placeNewPiece('e', 1, new King(board, Color.White, this));
+              pawn = new Pawn(board, Color.White, this);
+              this.placeNewPiece('e', 2, pawn);
+
+              this.placeNewPiece('e', 8, new King(board, Color.Black, this));
+              this.placeNewPiece('f', 6, new Pawn(board, Color.Black, this));
+            }
+          }
+
+          const chessMatchMock = new ChessMatchMock();
+          let source = new ChessPosition('e', 1);
+          let target = new ChessPosition('f', 1);
+          let capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toBeNull();
+
+          source = new ChessPosition('f', 6);
+          target = new ChessPosition('f', 4);
+          capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toBeNull();
+
+          source = new ChessPosition('e', 2);
+          target = new ChessPosition('e', 4);
+          capturedPiece = chessMatchMock.performChessMove(source, target);
+
+          source = new ChessPosition('f', 4);
+          target = new ChessPosition('e', 3);
+          capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toStrictEqual(pawn);
+        });
+
+        it('should be perform en passant move (RIGHT)', () => {
+          let board!: Board;
+          let pawn!: Pawn;
+          class ChessMatchMock extends ChessMatch {
+            protected initialSetup(): void {
+              board = this.board;
+              this.placeNewPiece('e', 1, new King(board, Color.White, this));
+              pawn = new Pawn(board, Color.White, this);
+              this.placeNewPiece('e', 2, pawn);
+
+              this.placeNewPiece('e', 8, new King(board, Color.Black, this));
+              this.placeNewPiece('d', 6, new Pawn(board, Color.Black, this));
+            }
+          }
+
+          const chessMatchMock = new ChessMatchMock();
+          let source = new ChessPosition('e', 1);
+          let target = new ChessPosition('f', 1);
+          let capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toBeNull();
+
+          source = new ChessPosition('d', 6);
+          target = new ChessPosition('d', 4);
+          capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toBeNull();
+
+          source = new ChessPosition('e', 2);
+          target = new ChessPosition('e', 4);
+          capturedPiece = chessMatchMock.performChessMove(source, target);
+
+          source = new ChessPosition('d', 4);
+          target = new ChessPosition('e', 3);
+          capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toStrictEqual(pawn);
+        });
+
+        it('should throw an error when player put yourself in check with en passant', () => {
+          let board!: Board;
+          class ChessMatchMock extends ChessMatch {
+            protected initialSetup(): void {
+              board = this.board;
+              this.placeNewPiece('a', 1, new Rook(board, Color.White));
+              this.placeNewPiece('e', 1, new King(board, Color.White, this));
+              this.placeNewPiece('e', 2, new Pawn(board, Color.White, this));
+
+              this.placeNewPiece('e', 8, new King(board, Color.Black, this));
+              this.placeNewPiece('d', 6, new Pawn(board, Color.Black, this));
+            }
+          }
+
+          const chessMatchMock = new ChessMatchMock();
+          let source = new ChessPosition('a', 1);
+          let target = new ChessPosition('b', 1);
+          let capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toBeNull();
+
+          source = new ChessPosition('e', 8);
+          target = new ChessPosition('d', 8);
+          capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toBeNull();
+
+          source = new ChessPosition('b', 1);
+          target = new ChessPosition('d', 1);
+          capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toBeNull();
+
+          source = new ChessPosition('d', 6);
+          target = new ChessPosition('d', 4);
+          capturedPiece = chessMatchMock.performChessMove(source, target);
+          expect(capturedPiece).toBeNull();
+
+          source = new ChessPosition('e', 2);
+          target = new ChessPosition('e', 4);
+          capturedPiece = chessMatchMock.performChessMove(source, target);
+
+          source = new ChessPosition('d', 4);
+          target = new ChessPosition('e', 3);
+          expect(() => chessMatchMock.performChessMove(source, target)).toThrowError(
+            `You can't put yourself in check`,
+          );
+
+          const pawnBlack = board.piece(source.toPosition());
+          expect(pawnBlack).toBeInstanceOf(Pawn);
+          const pawnWhite = board.piece(new ChessPosition('e', 4).toPosition());
+          expect(pawnWhite).toBeInstanceOf(Pawn);
+        });
       });
     });
   });

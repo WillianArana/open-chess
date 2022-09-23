@@ -3,18 +3,27 @@ import { Position } from '@src/board/domain/position';
 import { BoardInterface } from '@shared/domain/interfaces/board.interface';
 import { Matrix } from '@shared/domain/matrix';
 
+import { ChessMatch } from '../chess-match';
 import { ChessPiece } from '../chess-piece';
 import { Color } from '../color';
 
 const ABOVE = 1;
 const BELOW = -1;
 
-export class Pawn extends ChessPiece {
-  private readonly _direction: typeof ABOVE | typeof BELOW;
+type Direction = typeof ABOVE | typeof BELOW;
 
-  constructor(board: BoardInterface, color: Color) {
+export class Pawn extends ChessPiece {
+  protected readonly chessMatch: ChessMatch;
+
+  private readonly _direction: Direction;
+  private readonly _enPassantDirection: Direction;
+  private readonly _enPassantRow: 3 | 4;
+  constructor(board: BoardInterface, color: Color, chessMatch: ChessMatch) {
     super(board, color);
+    this.chessMatch = chessMatch;
     this._direction = this.isWhite ? ABOVE : BELOW;
+    this._enPassantRow = this.isWhite ? 3 : 4;
+    this._enPassantDirection = (this._direction * -1) as Direction;
   }
 
   //@Override
@@ -22,6 +31,7 @@ export class Pawn extends ChessPiece {
     const possibleMoves = this.createMatrixPossibleMoves();
     this.possibleDirectionMoves(possibleMoves);
     this.possibleOpponentPositionMoves(possibleMoves);
+    this.possibleEnPassantMoves(possibleMoves);
     return possibleMoves;
   }
 
@@ -61,6 +71,43 @@ export class Pawn extends ChessPiece {
         possibleMoves.set(true, position);
       }
     }
+  }
+
+  private possibleEnPassantMoves(possibleMoves: Matrix<boolean>): void {
+    if (this.isEnPassantRow(this.position)) {
+      this.possibleEnPassantLeftMoves(this.position, possibleMoves);
+      this.possibleEnPassantRightMoves(this.position, possibleMoves);
+    }
+  }
+
+  private isEnPassantRow(position: Position | null): position is Position {
+    return position?.row === this._enPassantRow;
+  }
+
+  private possibleEnPassantLeftMoves(position: Position, possibleMoves: Matrix<boolean>): void {
+    const left = new Position(position.row, position.column - 1);
+    this.setPossibleEnPassantMove(left, possibleMoves);
+  }
+
+  private setPossibleEnPassantMove(position: Position, possibleMoves: Matrix<boolean>): void {
+    const isPossible = this.isPossibleMoveWhenEnPassantVulnerable(position);
+    isPossible &&
+      possibleMoves.set(isPossible, {
+        row: position.row + this._enPassantDirection,
+        column: position.column,
+      });
+  }
+
+  private isPossibleMoveWhenEnPassantVulnerable(position: Position): boolean {
+    return (
+      this.canMoveInOpponentPosition(position) &&
+      this.board.piece(position) === this.chessMatch.enPassantVulnerable
+    );
+  }
+
+  private possibleEnPassantRightMoves(position: Position, possibleMoves: Matrix<boolean>): void {
+    const right = new Position(position.row, position.column + 1);
+    this.setPossibleEnPassantMove(right, possibleMoves);
   }
 
   //@Override
