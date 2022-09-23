@@ -140,18 +140,13 @@ export class ChessMatch {
     this.verifyIfPutYourselfInCheck(source, target, capturedPiece);
     this.loadStatus();
     this.isCheckMate || this.nextTurn();
-
-    const movedPiece = this.board.piece(target) as ChessPiece;
-    this.setIfHasEnPassantVulnerable(source, target, movedPiece);
+    this.setIfHasEnPassantVulnerable(source, target);
 
     return capturedPiece;
   }
 
-  private setIfHasEnPassantVulnerable(
-    source: Position,
-    target: Position,
-    movedPiece: ChessPiece,
-  ): void {
+  private setIfHasEnPassantVulnerable(source: Position, target: Position): void {
+    const movedPiece = this.board.piece(target) as ChessPiece;
     this._enPassantVulnerable =
       movedPiece instanceof Pawn && (target.row === source.row - 2 || target.row === source.row + 2)
         ? movedPiece
