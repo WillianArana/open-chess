@@ -1,4 +1,4 @@
-const CHARS = {
+const CHARS = Object.freeze({
   a: 97,
   b: 98,
   c: 99,
@@ -7,6 +7,6 @@ const CHARS = {
   f: 102,
   g: 103,
   h: 104,
-};
+});
 
 export default CHARS;
