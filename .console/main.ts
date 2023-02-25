@@ -1,12 +1,12 @@
 import { createInterface } from 'readline';
 import { stdin as input, stdout as output } from 'node:process';
 
-import { StartChessMatchUseCase } from '../src/chess/application/start-chess-match.use-case';
 import { PerformChessMoveUseCase } from '../src/chess/application/perform-chess-move.use-case';
 import { UI } from './ui';
+import { ChessMatchCMD } from '@src/chess/domain/chess-match.cmd';
 
 (() => {
-  const chessMatch = new StartChessMatchUseCase().execute();
+  const chessMatch = new ChessMatchCMD();
   const chessMove = new PerformChessMoveUseCase().execute(chessMatch);
   const rl = createInterface({ input, output });
 
