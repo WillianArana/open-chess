@@ -2,8 +2,8 @@ import { MatrixIteratorInterface } from './interfaces/matrix.iterator.interface'
 import { PositionInterface } from './interfaces/position.interface';
 
 export class MatrixIterator<T = unknown> implements MatrixIteratorInterface<T> {
-  private _row = 0;
-  private _column = -1;
+  #row = 0;
+  #column = -1;
 
   constructor(
     private readonly _items: T[][],
@@ -13,8 +13,8 @@ export class MatrixIterator<T = unknown> implements MatrixIteratorInterface<T> {
   ) {}
 
   reset(): void {
-    this._row = 0;
-    this._column = -1;
+    this.#row = 0;
+    this.#column = -1;
   }
 
   next(): IteratorResult<T> {
@@ -27,7 +27,7 @@ export class MatrixIterator<T = unknown> implements MatrixIteratorInterface<T> {
 
   private makeResult(): IteratorResult<T> {
     const done = this.isDone();
-    const value = done ? this._startValue : this._items[this._row][this._column];
+    const value = done ? this._startValue : this._items[this.#row][this.#column];
     return {
       value,
       done,
@@ -35,28 +35,28 @@ export class MatrixIterator<T = unknown> implements MatrixIteratorInterface<T> {
   }
 
   private nextColumn(): void {
-    this._column++;
+    this.#column++;
   }
 
   private isEndOfColumn(): boolean {
-    return this._column + 1 >= this._columnLimit;
+    return this.#column + 1 >= this._columnLimit;
   }
 
   private nextRow(): void {
-    this._row++;
-    if (this._row < this._rowLimit) {
-      this._column = 0;
+    this.#row++;
+    if (this.#row < this._rowLimit) {
+      this.#column = 0;
     }
   }
 
   private isDone(): boolean {
-    return this._row == this._rowLimit && this._column + 1 == this._columnLimit;
+    return this.#row == this._rowLimit && this.#column + 1 == this._columnLimit;
   }
 
   public position(): PositionInterface {
     return {
-      row: this._row,
-      column: Math.max(0, this._column),
+      row: this.#row,
+      column: Math.max(0, this.#column),
     };
   }
 }
