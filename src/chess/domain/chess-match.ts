@@ -25,54 +25,55 @@ import { RookWhite } from './pieces/white/rook.white';
 import ROWS_AMOUNT from './rows-amount';
 
 const COLUMN_AMOUNT = ROWS_AMOUNT;
-const switchPlayer = {
+const switchPlayer = Object.freeze({
   [Color.Black]: Color.White,
   [Color.White]: Color.Black,
-};
+});
 
 export class ChessMatch {
   public readonly piecesOnTheBoard: ChessPiece[] = [];
   public readonly capturedPieces: ChessPiece[] = [];
 
-  private readonly _board = new Board(ROWS_AMOUNT, COLUMN_AMOUNT);
-  private _turn = 1;
-  private _currentPlayer = Color.White;
-  private _check = false;
-  private _checkMate = false;
-  private _enPassantVulnerable: ChessPiece | null = null;
+  readonly #board = new Board(ROWS_AMOUNT, COLUMN_AMOUNT);
+
+  #turn = 1;
+  #currentPlayer = Color.White;
+  #check = false;
+  #checkMate = false;
+  #enPassantVulnerable: ChessPiece | null = null;
 
   constructor() {
     this.initialSetup();
   }
 
   get turn(): number {
-    return this._turn;
+    return this.#turn;
   }
 
   get currentPlayer(): Color {
-    return this._currentPlayer;
+    return this.#currentPlayer;
   }
 
   get isCheck(): boolean {
-    return this._check;
+    return this.#check;
   }
 
   get isCheckMate(): boolean {
-    return this._checkMate;
+    return this.#checkMate;
   }
 
   get enPassantVulnerable(): ChessPiece | null {
-    return this._enPassantVulnerable;
+    return this.#enPassantVulnerable;
   }
 
   protected get board(): Board {
-    return this._board;
+    return this.#board;
   }
 
   public pieces(): Matrix<ChessPiece> {
-    const { rows, columns } = this._board;
+    const { rows, columns } = this.#board;
     const chessPieces = new Matrix<ChessPiece>(rows, columns);
-    const pieces = this._board.pieces();
+    const pieces = this.#board.pieces();
     chessPieces.fill(pieces as Matrix<ChessPiece>);
     return chessPieces;
   }
@@ -82,8 +83,8 @@ export class ChessMatch {
     this.placeBlackPieces();
   }
 
-  private placeWhitePieces(): void {
-    const board = this._board;
+  protected placeWhitePieces(): void {
+    const board = this.#board;
     this.placeNewPiece('a', 1, new RookWhite(board));
     this.placeNewPiece('b', 1, new KnightWhite(board));
     this.placeNewPiece('c', 1, new BishopWhite(board));
@@ -98,8 +99,8 @@ export class ChessMatch {
     }
   }
 
-  private placeBlackPieces(): void {
-    const board = this._board;
+  protected placeBlackPieces(): void {
+    const board = this.#board;
     this.placeNewPiece('a', 8, new RookBlack(board));
     this.placeNewPiece('b', 8, new KnightBlack(board));
     this.placeNewPiece('c', 8, new BishopBlack(board));
@@ -116,14 +117,14 @@ export class ChessMatch {
 
   protected placeNewPiece(column: Column, row: Row, piece: ChessPiece): void {
     const position = new ChessPosition(column, row).toPosition();
-    this._board.placePiece(piece, position);
+    this.#board.placePiece(piece, position);
     this.piecesOnTheBoard.push(piece);
   }
 
   public possibleMoves(sourcePosition: ChessPosition): Matrix<boolean> {
     const position = sourcePosition.toPosition();
     this.validateSourcePosition(position);
-    return (this._board.piece(position) as Piece).possibleMoves();
+    return this.getChessPieceByPosition(position).possibleMoves();
   }
 
   public performChessMove(
@@ -147,7 +148,7 @@ export class ChessMatch {
 
   private setIfHasEnPassantVulnerable(source: Position, target: Position): void {
     const movedPiece = this.board.piece(target) as ChessPiece;
-    this._enPassantVulnerable =
+    this.#enPassantVulnerable =
       movedPiece instanceof Pawn && (target.row === source.row - 2 || target.row === source.row + 2)
         ? movedPiece
         : null;
@@ -160,35 +161,39 @@ export class ChessMatch {
   }
 
   private validateThereIsAPiece(position: Position): void {
-    if (!this._board.thereIsAPiece(position)) {
+    if (!this.#board.thereIsAPiece(position)) {
       throw new ChessError('There is no piece on source position');
     }
   }
 
   private validatePieceIsYours(position: Position): void {
-    const piece = this._board.piece(position) as ChessPiece;
-    if (this._currentPlayer !== piece.color) {
+    const piece = this.getChessPieceByPosition(position);
+    if (this.#currentPlayer !== piece.color) {
       throw new ChessError('The chosen piece is not yours');
     }
   }
 
+  private getChessPieceByPosition(position: Position): ChessPiece {
+    return this.#board.piece(position) as ChessPiece;
+  }
+
   private validateIsThereAnyPossibleMove(position: Position): void {
-    if (!this._board.piece(position)?.isThereAnyPossibleMove()) {
+    if (!this.getChessPieceByPosition(position).isThereAnyPossibleMove()) {
       throw new ChessError('There is no possible moves for the chosen piece');
     }
   }
 
   private validateTargetPosition(source: Position, target: Position): void {
-    if (!this._board.piece(source)?.possibleMove(target)) {
+    if (!this.getChessPieceByPosition(source).possibleMove(target)) {
       throw new ChessError(`There chose piece can't move to target position`);
     }
   }
 
   private makeMove(source: Position, target: Position): Piece | null {
-    const piece = this._board.removePiece(source) as ChessPiece;
+    const piece = this.#board.removePiece(source) as ChessPiece;
     piece.increaseMoveCount();
-    let capturedPiece = this._board.removePiece(target);
-    this._board.placePiece(piece, target);
+    let capturedPiece = this.#board.removePiece(target);
+    this.#board.placePiece(piece, target);
 
     this.specialMoveCastlingKingSideRook(piece, source, target);
     this.specialMoveCastlingQueenSideRook(piece, source, target);
@@ -266,16 +271,16 @@ export class ChessMatch {
     target: Position,
     capturedPiece: ChessPiece | null,
   ): void {
-    if (this.testCheck(this._currentPlayer)) {
+    if (this.testCheck(this.#currentPlayer)) {
       this.undoMove(source, target, capturedPiece);
       throw new ChessError(`You can't put yourself in check`);
     }
   }
 
   private loadStatus(): void {
-    const opponent = this.opponent(this._currentPlayer);
-    this._check = this.testCheck(opponent);
-    this._checkMate = this._check && this.testCheckMate(opponent);
+    const opponent = this.opponent(this.#currentPlayer);
+    this.#check = this.testCheck(opponent);
+    this.#checkMate = this.#check && this.testCheckMate(opponent);
   }
 
   private testCheck(color: Color): boolean {
@@ -286,12 +291,12 @@ export class ChessMatch {
   }
 
   private undoMove(source: Position, target: Position, capturedPiece: ChessPiece | null): void {
-    const piece = this._board.removePiece(target) as ChessPiece;
-    this._board.placePiece(piece, source);
+    const piece = this.#board.removePiece(target) as ChessPiece;
+    this.#board.placePiece(piece, source);
 
     if (capturedPiece) {
       capturedPiece.decreaseMoveCount();
-      this._board.placePiece(capturedPiece, target);
+      this.#board.placePiece(capturedPiece, target);
       this.removeCapturedPiece(capturedPiece);
     }
 
@@ -314,7 +319,7 @@ export class ChessMatch {
       const pawn = this.board.removePiece(target) as ChessPiece;
       const row = piece.isWhite ? 3 : 4;
       const pawnPosition = new Position(row, target.column);
-      this._board.placePiece(pawn, pawnPosition);
+      this.#board.placePiece(pawn, pawnPosition);
     }
   }
 
@@ -326,7 +331,7 @@ export class ChessMatch {
     if (this.checkCastlingKingSideRook(piece, source, target)) {
       const rookSource = new Position(source.row, source.column + 3);
       const rookTarget = new Position(source.row, source.column + 1);
-      const rook = this._board.piece(rookSource) as ChessPiece;
+      const rook = this.#board.piece(rookSource) as ChessPiece;
       this.undoMove(rookSource, rookTarget, rook);
     }
   }
@@ -339,7 +344,7 @@ export class ChessMatch {
     if (this.checkCastlingQueenSideRook(piece, source, target)) {
       const rookSource = new Position(source.row, source.column - 4);
       const rookTarget = new Position(source.row, source.column - 1);
-      const rook = this._board.piece(rookSource) as ChessPiece;
+      const rook = this.#board.piece(rookSource) as ChessPiece;
       this.undoMove(rookSource, rookTarget, rook);
     }
   }
@@ -353,8 +358,8 @@ export class ChessMatch {
   }
 
   private nextTurn(): void {
-    this._turn++;
-    this._currentPlayer = this.opponent(this._currentPlayer);
+    this.#turn++;
+    this.#currentPlayer = this.opponent(this.#currentPlayer);
   }
 
   private opponent(color: Color): Color {

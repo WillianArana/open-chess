@@ -21,7 +21,7 @@ describe('KnightWhite', () => {
   describe('toString', () => {
     it('should get white piece', () => {
       const piece = new KnightWhite(board);
-      expect(piece.toString()).toBe('♘');
+      expect(piece.toString()).toBe('N');
     });
   });
 });

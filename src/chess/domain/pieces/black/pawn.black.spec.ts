@@ -23,7 +23,7 @@ describe('PawnBlack', () => {
   describe('toString', () => {
     it('should get black piece', () => {
       const piece = new PawnBlack(board, chessMatch);
-      expect(piece.toString()).toBe('♟');
+      expect(piece.toString()).toBe('p');
     });
   });
 });

@@ -11,6 +11,6 @@ export class PawnWhite extends Pawn {
 
   //@Override
   public toString(): string {
-    return '♙';
+    return 'P';
   }
 }

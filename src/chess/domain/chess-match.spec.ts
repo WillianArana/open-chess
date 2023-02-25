@@ -1,6 +1,6 @@
 import { Board } from '@src/board/domain/board';
 import { ChessMatch } from './chess-match';
-import { ChessPosition } from './chess-position';
+import { ChessPosition, Column, Row } from './chess-position';
 import { Color } from './color';
 import { Bishop } from './pieces/bishop';
 import { King } from './pieces/king';
@@ -76,12 +76,12 @@ describe('ChessMatch', () => {
       expect(pieces.get(position).color).toBe(white);
 
       for (let row of 'abcdefgh') {
-        position = new ChessPosition(row as any, 2).toPosition();
+        position = new ChessPosition(row as Column, 2).toPosition();
         expect(pieces.get(position)).toBeInstanceOf(Pawn);
         expect(pieces.get(position).color).toBe(white);
 
         for (let i = 3; i < 5; i++) {
-          position = new ChessPosition(row as any, i as any).toPosition();
+          position = new ChessPosition(row as Column, i as Row).toPosition();
           expect(pieces.get(position)).toBeNull();
         }
       }
@@ -125,12 +125,12 @@ describe('ChessMatch', () => {
       expect(pieces.get(position).color).toBe(black);
 
       for (let row of 'abcdefgh') {
-        position = new ChessPosition(row as any, 7).toPosition();
+        position = new ChessPosition(row as Column, 7).toPosition();
         expect(pieces.get(position)).toBeInstanceOf(Pawn);
         expect(pieces.get(position).color).toBe(black);
 
         for (let i = 5; i < 7; i++) {
-          position = new ChessPosition(row as any, i as any).toPosition();
+          position = new ChessPosition(row as Column, i as Row).toPosition();
           expect(pieces.get(position)).toBeNull();
         }
       }

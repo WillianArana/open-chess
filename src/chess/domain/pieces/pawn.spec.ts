@@ -1,3 +1,4 @@
+import { Matrix } from '@shared/domain/matrix';
 import { Board } from '@src/board/domain/board';
 import { Position } from '@src/board/domain/position';
 import { ChessMatch } from '../chess-match';
@@ -43,7 +44,7 @@ describe('Pawn', () => {
   describe('possibleMoves', () => {
     it('should get possible moves with empty board (WHITE)', () => {
       const piece = new Pawn(board, Color.White, chessMatch);
-      (piece as any).position = new Position(3, 3);
+      Object.assign(piece, { position: new Position(3, 3) });
       const pieceMoves = (i: number, j: number) => (i === 2 && j === 3) || (i === 1 && j === 3);
 
       const possibleMoves = piece.possibleMoves();
@@ -56,7 +57,7 @@ describe('Pawn', () => {
 
     it('should get possible moves with empty board (BLACK)', () => {
       const piece = new Pawn(board, Color.Black, chessMatch);
-      (piece as any).position = new Position(3, 3);
+      Object.assign(piece, { position: new Position(3, 3) });
       const pieceMoves = (i: number, j: number) => (i === 4 && j === 3) || (i === 5 && j === 3);
 
       const possibleMoves = piece.possibleMoves();
@@ -65,6 +66,11 @@ describe('Pawn', () => {
           expect(possibleMoves.get({ row: i, column: j })).toBe(pieceMoves(i, j));
         }
       }
+    });
+
+    it('should get possible moves when position is null', () => {
+      const pawn = new Pawn(board, Color.White, chessMatch);
+      expect(pawn.possibleMoves()).toBeInstanceOf(Matrix);
     });
 
     it('should get possible moves with opponents around', () => {

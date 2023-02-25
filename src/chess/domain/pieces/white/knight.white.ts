@@ -10,6 +10,6 @@ export class KnightWhite extends Knight {
 
   //@Override
   public toString(): string {
-    return '♘';
+    return 'N';
   }
 }

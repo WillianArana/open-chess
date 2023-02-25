@@ -24,7 +24,7 @@ describe('KingWhite', () => {
   describe('toString', () => {
     it('should get white piece', () => {
       const piece = new KingWhite(board, chessMatch);
-      expect(piece.toString()).toBe('♔');
+      expect(piece.toString()).toBe('K');
     });
   });
 });

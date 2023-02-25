@@ -21,7 +21,7 @@ describe('BishopBlack', () => {
   describe('toString', () => {
     it('should get black piece', () => {
       const piece = new BishopBlack(board);
-      expect(piece.toString()).toBe('♝');
+      expect(piece.toString()).toBe('b');
     });
   });
 });

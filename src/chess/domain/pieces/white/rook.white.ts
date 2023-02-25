@@ -10,6 +10,6 @@ export class RookWhite extends Rook {
 
   //@Override
   public toString(): string {
-    return '♖';
+    return 'R';
   }
 }

@@ -21,7 +21,7 @@ describe('QueenBlack', () => {
   describe('toString', () => {
     it('should get black piece', () => {
       const piece = new QueenBlack(board);
-      expect(piece.toString()).toBe('♛');
+      expect(piece.toString()).toBe('q');
     });
   });
 });

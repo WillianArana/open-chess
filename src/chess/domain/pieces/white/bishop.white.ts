@@ -9,6 +9,6 @@ export class BishopWhite extends Bishop {
   }
   //@Override
   public toString(): string {
-    return '♗';
+    return 'B';
   }
 }

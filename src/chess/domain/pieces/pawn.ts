@@ -15,15 +15,15 @@ type Direction = typeof ABOVE | typeof BELOW;
 export class Pawn extends ChessPiece {
   protected readonly chessMatch: ChessMatch;
 
-  private readonly _direction: Direction;
-  private readonly _enPassantDirection: Direction;
-  private readonly _enPassantRow: 3 | 4;
+  readonly #direction: Direction;
+  readonly #enPassantDirection: Direction;
+  readonly #enPassantRow: 3 | 4;
   constructor(board: BoardInterface, color: Color, chessMatch: ChessMatch) {
     super(board, color);
     this.chessMatch = chessMatch;
-    this._direction = this.isWhite ? ABOVE : BELOW;
-    this._enPassantRow = this.isWhite ? 3 : 4;
-    this._enPassantDirection = (this._direction * -1) as Direction;
+    this.#direction = this.isWhite ? ABOVE : BELOW;
+    this.#enPassantRow = this.isWhite ? 3 : 4;
+    this.#enPassantDirection = (this.#direction * -1) as Direction;
   }
 
   //@Override
@@ -37,11 +37,11 @@ export class Pawn extends ChessPiece {
 
   private possibleDirectionMoves(possibleMoves: Matrix<boolean>): void {
     if (this.position) {
-      let position = new Position(this.position.row - this._direction, this.position.column);
+      let position = new Position(this.position.row - this.#direction, this.position.column);
       if (this.canMoveInEmptyPosition(position)) {
         possibleMoves.set(true, position);
         if (this.moveCount == 0) {
-          position = new Position(this.position.row - this._direction * 2, this.position.column);
+          position = new Position(this.position.row - this.#direction * 2, this.position.column);
           if (this.canMoveInEmptyPosition(position)) {
             possibleMoves.set(true, position);
           }
@@ -52,11 +52,11 @@ export class Pawn extends ChessPiece {
 
   private possibleOpponentPositionMoves(possibleMoves: Matrix<boolean>): void {
     let createPosition = (row: number, column: number) =>
-      new Position(row - this._direction, column - 1);
+      new Position(row - this.#direction, column - 1);
     this.setPossibleMoves(possibleMoves, createPosition);
 
     createPosition = (row: number, column: number) =>
-      new Position(row - this._direction, column + 1);
+      new Position(row - this.#direction, column + 1);
     this.setPossibleMoves(possibleMoves, createPosition);
   }
 
@@ -81,7 +81,7 @@ export class Pawn extends ChessPiece {
   }
 
   private isEnPassantRow(position: Position | null): position is Position {
-    return position?.row === this._enPassantRow;
+    return position?.row === this.#enPassantRow;
   }
 
   private possibleEnPassantLeftMoves(position: Position, possibleMoves: Matrix<boolean>): void {
@@ -93,7 +93,7 @@ export class Pawn extends ChessPiece {
     const isPossible = this.isPossibleMoveWhenEnPassantVulnerable(position);
     isPossible &&
       possibleMoves.set(isPossible, {
-        row: position.row + this._enPassantDirection,
+        row: position.row + this.#enPassantDirection,
         column: position.column,
       });
   }

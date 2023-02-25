@@ -45,7 +45,7 @@ describe('King', () => {
     it('should get possible moves with empty board', () => {
       const piece = new King(board, Color.White, chessMatch);
       piece.increaseMoveCount();
-      (piece as any).position = new Position(3, 3);
+      Object.assign(piece, { position: new Position(3, 3) });
       const pieceMoves = (i: number, j: number) =>
         (i === 2 && j === 2) ||
         (i === 2 && j === 3) ||

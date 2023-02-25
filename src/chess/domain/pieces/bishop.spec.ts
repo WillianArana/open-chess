@@ -35,7 +35,7 @@ describe('Bishop', () => {
   describe('possibleMoves', () => {
     it('should get possible moves with empty board', () => {
       const piece = new Bishop(board, Color.White);
-      (piece as any).position = new Position(3, 3);
+      Object.assign(piece, { position: new Position(3, 3) });
       const pieceMoves = (i: number, j: number) =>
         (i === 0 && j === 0) ||
         (i === 1 && j === 1) ||

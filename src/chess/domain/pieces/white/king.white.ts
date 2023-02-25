@@ -11,6 +11,6 @@ export class KingWhite extends King {
 
   //@Override
   public toString(): string {
-    return '♔';
+    return 'K';
   }
 }

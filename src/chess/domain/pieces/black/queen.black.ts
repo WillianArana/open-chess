@@ -10,6 +10,6 @@ export class QueenBlack extends Queen {
 
   //@Override
   public toString(): string {
-    return '♛';
+    return 'q';
   }
 }

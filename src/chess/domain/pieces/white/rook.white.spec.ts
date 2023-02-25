@@ -20,7 +20,7 @@ describe('RookWhite', () => {
   describe('toString', () => {
     it('should get white piece', () => {
       const piece = new RookWhite(board);
-      expect(piece.toString()).toBe('♖');
+      expect(piece.toString()).toBe('R');
     });
   });
 });
