@@ -9,7 +9,7 @@ import { Color } from './color';
 
 export abstract class ChessPiece extends Piece {
   public readonly color: Color;
-  private _moveCount = 0;
+  #moveCount = 0;
   constructor(board: BoardInterface, color: Color) {
     super(board);
     this.color = color;
@@ -25,15 +25,15 @@ export abstract class ChessPiece extends Piece {
   }
 
   public get moveCount(): number {
-    return this._moveCount;
+    return this.#moveCount;
   }
 
   public increaseMoveCount(): void {
-    this._moveCount++;
+    this.#moveCount++;
   }
 
   public decreaseMoveCount(): void {
-    this._moveCount--;
+    this.#moveCount--;
   }
 
   protected setPossibleMoves(
