@@ -30,12 +30,10 @@ export class UI {
 
   static players = {
     [Color.White]: {
-      describe: 'WHITE',
-      color: `${UI.COLOR_PIECE_WHITE}□${UI.ANSI_RESET}`,
+      describe: `${UI.COLOR_PIECE_WHITE}WHITE${UI.ANSI_RESET}`,
     },
     [Color.Black]: {
-      describe: 'BLACK',
-      color: `${UI.COLOR_PIECE_BLACK}■${UI.ANSI_RESET}`,
+      describe: `${UI.COLOR_PIECE_BLACK}BLACK${UI.ANSI_RESET}`,
     },
   };
 
@@ -50,7 +48,7 @@ export class UI {
 
   private static printLayout(
     pieces: Matrix<ChessPiece>,
-    getPieceInRow: (i: number, j: number, row: string) => string
+    getPieceInRow: (i: number, j: number, row: string) => string,
   ): void {
     info('\n');
     for (let i = 0; i < pieces.rows; i++) {
@@ -65,7 +63,7 @@ export class UI {
 
   public static printBoardWithPossibleMoves(
     pieces: Matrix<ChessPiece>,
-    possibleMoves: Matrix<boolean>
+    possibleMoves: Matrix<boolean>,
   ): void {
     const getPieceInRow = (i: number, j: number, row: string) => {
       const position = { row: i, column: j };
@@ -106,14 +104,13 @@ export class UI {
   public static printMatch(chessMatch: ChessMatch): void {
     UI.printBoard(chessMatch.pieces());
     UI.printCapturedPieces(chessMatch.capturedPieces);
-    info('Turn:', chessMatch.turn);
+    info('Turn:', `${UI.ANSI_CYAN}${chessMatch.turn}${UI.ANSI_RESET}`);
     const currentPlayer = UI.players[chessMatch.currentPlayer];
     if (chessMatch.isCheckMate) {
       info('\nCHECKMATE!');
       info('Winner:', currentPlayer.describe);
     } else {
       info('Waiting player:', currentPlayer.describe);
-      info('Piece style:', currentPlayer.color);
       if (chessMatch.isCheck) {
         info('\nCHECK!');
       }
