@@ -109,6 +109,8 @@ export class UI {
     if (chessMatch.isCheckMate) {
       info('\nCHECKMATE!');
       info('Winner:', currentPlayer.describe);
+    } else if (chessMatch.isDraw) {
+      info('\nDRAW!');
     } else {
       info('Waiting player:', currentPlayer.describe);
       if (chessMatch.isCheck) {

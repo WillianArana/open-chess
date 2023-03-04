@@ -283,6 +283,26 @@ describe('ChessMatch', () => {
       expect(chessMatchMock.isCheckMate).toBeTruthy();
     });
 
+    it('should be draw', () => {
+      class ChessMatchMock extends ChessMatch {
+        protected initialSetup(): void {
+          const board = this.board;
+          this.placeNewPiece('e', 1, new King(board, Color.White, this));
+
+          this.placeNewPiece('e', 2, new Pawn(board, Color.Black, this));
+          this.placeNewPiece('e', 8, new King(board, Color.Black, this));
+        }
+      }
+
+      const chessMatchMock = new ChessMatchMock();
+      let source = new ChessPosition('e', 1);
+      let target = new ChessPosition('e', 2);
+      const piece = chessMatchMock.performChessMove(source, target);
+
+      expect(piece).toBeInstanceOf(Pawn);
+      expect(chessMatchMock.isDraw).toBeTruthy();
+    });
+
     describe('castling', () => {
       it('should be perform castling move (KING SIDE ROOK)', () => {
         let board!: Board;

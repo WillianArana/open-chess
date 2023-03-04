@@ -40,18 +40,19 @@ export class ChessMatch {
   #currentPlayer = Color.White;
   #check = false;
   #checkMate = false;
+  #draw = false;
   #enPassantVulnerable: ChessPiece | null = null;
 
   constructor() {
     this.initialSetup();
   }
 
-  get turn(): number {
-    return this.#turn;
-  }
-
   get currentPlayer(): Color {
     return this.#currentPlayer;
+  }
+
+  get enPassantVulnerable(): ChessPiece | null {
+    return this.#enPassantVulnerable;
   }
 
   get isCheck(): boolean {
@@ -62,8 +63,12 @@ export class ChessMatch {
     return this.#checkMate;
   }
 
-  get enPassantVulnerable(): ChessPiece | null {
-    return this.#enPassantVulnerable;
+  get isDraw(): boolean {
+    return this.#draw;
+  }
+
+  get turn(): number {
+    return this.#turn;
   }
 
   protected get board(): Board {
@@ -142,16 +147,9 @@ export class ChessMatch {
     this.loadStatus();
     this.isCheckMate || this.nextTurn();
     this.setIfHasEnPassantVulnerable(source, target);
+    this.setIfIsDaw();
 
     return capturedPiece;
-  }
-
-  private setIfHasEnPassantVulnerable(source: Position, target: Position): void {
-    const movedPiece = this.board.piece(target) as ChessPiece;
-    this.#enPassantVulnerable =
-      movedPiece instanceof Pawn && (target.row === source.row - 2 || target.row === source.row + 2)
-        ? movedPiece
-        : null;
   }
 
   private validateSourcePosition(position: Position): void {
@@ -200,6 +198,20 @@ export class ChessMatch {
     capturedPiece = this.specialMoveEnPassant(piece, source, target, capturedPiece);
 
     return capturedPiece;
+  }
+
+  private setIfHasEnPassantVulnerable(source: Position, target: Position): void {
+    const movedPiece = this.board.piece(target) as ChessPiece;
+    this.#enPassantVulnerable =
+      movedPiece instanceof Pawn && (target.row === source.row - 2 || target.row === source.row + 2)
+        ? movedPiece
+        : null;
+  }
+
+  private setIfIsDaw(): void {
+    if (this.piecesOnTheBoard.length == 2) {
+      this.#draw = this.piecesOnTheBoard.every((p) => p instanceof King);
+    }
   }
 
   private specialMoveEnPassant(

@@ -53,7 +53,7 @@ import { ChessMatchCMD } from '@src/chess/domain/chess-match.cmd';
     } catch (error) {
       await question(`${error}`);
     } finally {
-      if (chessMatch.isCheckMate) {
+      if (chessMatch.isCheckMate || chessMatch.isDraw) {
         UI.clearScreen();
         UI.printMatch(chessMatch);
         rl.close();
